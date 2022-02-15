@@ -1,17 +1,30 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="HELLO" id="app">
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Auth from './helpers/Auth.js'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+  },
+  methods: {
+    logout () {
+      console.log('logout')
+    }
+  },
+  async created () {
+    let login = null
+    const auth = new Auth()
+
+    login = await auth.login('admin', 'admin').catch(() => {
+      this.logout()
+    })
+    // await auth.verifyToken()
+    console.log(login)
   }
 }
 </script>
@@ -19,10 +32,9 @@ export default {
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+html, body {
+  height: 100%;
+  margin: 0;
 }
 </style>
