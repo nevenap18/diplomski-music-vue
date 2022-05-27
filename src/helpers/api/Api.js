@@ -43,6 +43,14 @@ export default class Api {
   static removeDefaultHeader (header) {
     delete Api.api.defaults.headers['common'][header]
   }
+  static setErrorInterceptor (errorCode, cbError) {
+    Api.api.interceptors.response.use(response => response, error => {
+      if (error.statusCode === errorCode) {
+        cbError()
+      }
+      return Promise.reject(error)
+    })
+  }
 
 }
 Api.api = Api.create()

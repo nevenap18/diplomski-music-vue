@@ -1,0 +1,42 @@
+// COLORS
+$gold: #77b3b6;
+$light-gold: #a2c8da;
+$dark-gold: #114c63;
+$cream: #c3e9eb;
+$dark-cream: #9dd9db;
+$moss: #147477;
+$forest: #0a494b;
+$black: #000000;
+$maroon: rgb(145, 39, 39);
+$error: #e73434;
+
+$shadow: drop-shadow(0px 0px 2px rgba(53, 71, 38, 0.75));
+
+$bcg-image: url("https://i.ibb.co/3p0TPtX/1111download.png");
+
+// ANIMATIONS
+$transition: .3s ease;
+
+// FONTS
+$font-regular: 400 14px/20px 'argesta_displayregular', sans-serif;
+$font-large: 400 24px/32px 'argesta_displayregular', sans-serif;
+$font-xlarge: 400 28px/36px 'argesta_displayregular', sans-serif;
+$font-small: 400 12px/17px 'argesta_displayregular', sans-serif;
+$font-regular-bold: 700 14px/20px 'argesta_displayregular', sans-serif;
+$font-large-bold: 700 24px/32px 'argesta_displayregular', sans-serif;
+$font-xlarge-bold: 700 28px/36px 'argesta_displayregular', sans-serif;
+$font-xxlarge-bold: 700 32px/38px 'argesta_displayregular', sans-serif;
+$font-small-bold: 700 12px/17px 'argesta_displayregular', sans-serif;
+
+// SPACING
+$spacing-regular: "0";
+$spacing-large: "0.5px";
+$spacing-medium: "0.15px";
+
+// Button svg shadow
+$svg-shadow: drop-shadow(0px 0px 2px rgba(0,0,0,.75));
+
+$breakpointlimit: 1024px;
+$breakpointmin: 1365px;
+$breakpoint: 1600px;
+$breakpointmax: 2000px;

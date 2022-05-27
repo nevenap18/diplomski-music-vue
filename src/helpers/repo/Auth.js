@@ -1,15 +1,30 @@
-import Api from './api/Api'
+import Api from '../api/Api'
 
+const TYPE = 'application/json'
 export default class AuthRepo {
   constructor () {
     this.PATH = 'auth'
   }
-
+  register (email, username, password) {
+    const config = {
+      url: `http://localhost:3000/${this.PATH}/register`,
+      headers: {
+        'Content-Type': TYPE
+      },
+      method: 'POST',
+      data: {
+        email,
+        username,
+        password
+      }
+    }
+    return Api.getOpenApi().request(config).then(response => response.data).catch(err => Promise.reject(err))
+  }
   login (username, password) {
     const config = {
       url: `http://localhost:3000/${this.PATH}/login`,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': TYPE
       },
       method: 'POST',
       data: {
@@ -19,15 +34,15 @@ export default class AuthRepo {
     }
     return Api.getOpenApi().request(config).then(response => response.data).catch(err => Promise.reject(err))
   }
-  verifyToken () {
+  verifyToken (token) {
     const config = {
       url: `http://localhost:3000/${this.PATH}/verify`,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': TYPE
       },
       method: 'POST',
       data: {
-        token: 'eyJ1c2VybmFtZSI6ImFkbWluIiwic3ViIjozLCJpYXQiOjE2NDQ4NTU5OTksImV4cCI6MTY0NTcxOTk5OX0'
+        token
       }
     }
     return Api.getOpenApi().request(config).then(response => response.data).catch(err => Promise.reject(err))
