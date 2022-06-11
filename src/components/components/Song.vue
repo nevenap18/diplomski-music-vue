@@ -11,6 +11,12 @@
       >
         <use href="#heart"></use>
       </svg>
+      <svg
+        class="add-svg"
+        @click="addToPlaylist"
+      >
+        <use href="#add"></use>
+      </svg>
       <svg class="play-svg">
         <use href="#play"></use>
       </svg>
@@ -42,7 +48,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'addRemoveFavoriteSong'
+      'addRemoveFavoriteSong', 'openAddPlaylistModal'
     ]),
     goToArtist () {
       this.$router.push({name: 'Artist', props: {id: this.artist.artistId}})
@@ -53,6 +59,11 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    addToPlaylist () {
+      this.openAddPlaylistModal({
+        songId: this.song.songId
+      })
     }
   }
 }
@@ -78,21 +89,20 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 50px;
+}
+svg {
+  width: 17px;
+  height: 17px;
+  fill: $moss;
+  margin-left: 10px;
+  cursor: pointer;
+  &:hover {
+    fill: $forest;
+  }
 }
 .fav-svg {
-  width: 16px;
-  height: 16px;
-  fill: $moss;
-  cursor: pointer;
   &.active {
     fill: red;
   }
-}
-.play-svg {
-  width: 16px;
-  height: 16px;
-  fill: $moss;
-  cursor: pointer;
 }
 </style>

@@ -57,6 +57,13 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/variables.scss';
 .songs {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.song {
   width: 60%;
 }
 .title {

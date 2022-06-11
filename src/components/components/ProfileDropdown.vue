@@ -14,7 +14,7 @@
         this.$emit('closeDropdown')
         setTimeout(() => {
           this.$router.push({name: 'Login'})
-        }, 500)
+        }, 1000)
       },
       goToEdit () {
         this.$emit('closeDropdown')

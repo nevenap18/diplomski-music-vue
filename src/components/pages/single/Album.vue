@@ -15,7 +15,7 @@
       <div class="title">
         <h1>SONGS</h1>
       </div>
-      <Song v-for="(song, index) in albumInfo.songs" :key="index" :artist="albumInfo.artist" :song="song" />
+      <Song v-for="(song, index) in albumInfo.songs" class="song" :key="index" :artist="albumInfo.artist" :song="song" />
     </div>
   </div>
 </template>
@@ -78,6 +78,13 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/variables.scss';
 .songs {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.song {
   width: 60%;
 }
 .title {

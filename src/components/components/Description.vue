@@ -4,7 +4,7 @@
       <img class="image" :alt="'aaa'" :src="image"/>
     </div>
     <div class="info-container">
-      <div v-if="title" class="title"> {{ title }}
+      <div v-if="title" class="title">{{ title }}
         <span
           class="artist"
           v-if="artist && artist.name"
@@ -21,9 +21,26 @@
             <use href="#heart"></use>
           </svg>
         </span>
+        <span v-if="isPlaylist" class="edit-button">
+          <svg
+            class="edit-svg"
+            @click="$emit('edit')"
+          >
+            <use href="#edit"></use>
+          </svg>
+        </span>
+        <span v-if="isPlaylist" class="delete-button">
+          <svg
+            class="delete-svg"
+            @click="$emit('delete')"
+          >
+            <use href="#delete"></use>
+          </svg>
+        </span>
       </div>
       <div v-if="year" class="year">{{ year }}</div>
       <div v-if="description" class="description">{{ description }}</div>
+      <div v-else class="description">No description.</div>
     </div>
   </div>
 </template>
@@ -61,9 +78,12 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    isPlaylist: {
+      type: Boolean,
+      required: false,
+      default: false
     }
-  },
-  computed: {
   }
 }
 </script>
@@ -103,13 +123,21 @@ img {
     text-align: center;
   }
 }
-.fav-svg {
+svg {
+  margin: 0 5px 0 5px;
   width: 20px;
   height: 20px;
   fill: $moss;
   cursor: pointer;
-  &.active {
-    fill: red;
+  &:hover {
+    fill: $forest;
   }
+}
+.fav-svg.active {
+  fill: red;
+}
+.delete-svg:hover {
+  transition: fill 0.2s ease;
+  fill: red !important;
 }
 </style>

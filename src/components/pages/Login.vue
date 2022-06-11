@@ -68,20 +68,20 @@ export default {
       this.errorLogin = false
       this.errorMessage = ''
     },
-    async loginAction () {
+    loginAction () {
       if (!this.username || !this.password) {
         this.errorMessage = 'Please complete the form'
         this.errorLogin = true
         return
       }
       const auth = new Auth()
-      await auth.login(this.username, this.password).then(res => {
+      auth.login(this.username, this.password).then(res => {
         document.cookie = `token=${res.access_token}`
         this.$router.push({name: 'Home'})
         // set token to store
-      }).catch(e => {
+      }).catch(() => {
         this.errorLogin = true
-        this.errorMessage = e.message
+        this.errorMessage = 'Error, check credentials.'
       })
     },
     goToRegister () {
