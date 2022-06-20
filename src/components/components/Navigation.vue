@@ -45,6 +45,10 @@
           <span>GENRES</span>
         </div>
       </div>
+      <input type="text" id="search-input"
+        placeholder="Search"
+        @keydown="search" maxLength="50"
+      >
       <div class="bottom-actions">
         <div class="profile">
           <img class="profile-img" @click="dropdownAction" v-if="profile" alt="avatar" :src="profile.image"/>
@@ -57,7 +61,7 @@
 
 <script>
 import ProfileDropdown from './ProfileDropdown'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
   name: 'Navigation',
@@ -75,6 +79,16 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setSearchQuery']),
+    search (event) {
+      if (event.keyCode === 13) {
+        this.setSearchQuery({ type: 'SONGS', term: event.target.value})
+        if (this.$route.name !== 'Search') {
+          console.log('aaaaaaaaaaaaaaaaaaaaaaaa')
+          this.$router.push({name: 'Search'})
+        }
+      }
+    },
     goTo (path) {
       if (this.$route.path !== path) {
         this.$router.push({path})

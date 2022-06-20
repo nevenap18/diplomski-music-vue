@@ -16,6 +16,7 @@ import Album from '@/components/pages/single/Album'
 import Genre from '@/components/pages/single/Genre'
 import Playlist from '@/components/pages/single/Playlist'
 import Settings from '@/components/pages/Settings'
+import Search from '@/components/pages/Search'
 
 export const router = new Router({
   mode: 'history',
@@ -114,6 +115,11 @@ export const router = new Router({
                   name: 'Genre',
                   props: true,
                   component: Genre
+                },
+                {
+                  path: '/search',
+                  name: 'Search',
+                  component: Search
                 }
               ]
             }

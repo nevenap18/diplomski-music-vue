@@ -16,7 +16,8 @@ const state = {
   showAddPlaylistModal: false,
   showCreatePlaylistModal: false,
   editPlaylistModalData: {},
-  showEditPlaylistModal: false
+  showEditPlaylistModal: false,
+  searchQuery: {}
 }
 
 const getters = {
@@ -37,7 +38,8 @@ const getters = {
   showAddPlaylistModal: state => state.showAddPlaylistModal,
   showCreatePlaylistModal: state => state.showCreatePlaylistModal,
   showEditPlaylistModal: state => state.showEditPlaylistModal,
-  editPlaylistModalData: state => state.editPlaylistModalData
+  editPlaylistModalData: state => state.editPlaylistModalData,
+  searchQuery: state => state.searchQuery
 }
 
 const mutations = {
@@ -96,6 +98,9 @@ const mutations = {
   },
   CLOSE_EDIT_PLAYLIST_MODAL: (state) => {
     state.showEditPlaylistModal = false
+  },
+  SET_SEARCH_QUERY: (state, payload) => {
+    state.searchQuery = payload
   }
 }
 const actions = {
@@ -186,7 +191,10 @@ const actions = {
   closeEditPlaylistModal: async ({commit}) => {
     commit('UPDATE_EDIT_PLAYLIST_MODAL_DATA', {})
     commit('CLOSE_EDIT_PLAYLIST_MODAL')
-  }
+  },
+  setSearchQuery: ({commit}, payload) => {
+    commit('SET_SEARCH_QUERY', payload)
+  },
 }
 
 export default {
