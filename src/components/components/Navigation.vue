@@ -82,7 +82,7 @@ export default {
     ...mapActions(['setSearchQuery']),
     search (event) {
       if (event.keyCode === 13) {
-        this.setSearchQuery({ type: 'SONGS', term: event.target.value})
+        this.setSearchQuery({ type: this.$route.query.type || 'SONGS', term: event.target.value})
         if (this.$route.name !== 'Search') {
           console.log('aaaaaaaaaaaaaaaaaaaaaaaa')
           this.$router.push({name: 'Search'})

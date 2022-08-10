@@ -64,7 +64,7 @@
             :class="{disabled: !username || !password || !confirmedPassword}"
             @click="registerAction"
           >
-            Submit
+            Register
           </button>
           <button class="button-login" @click="goToLogin">Go to Login page</button>
           <p v-if="errorRegister" class="error">{{errorMessage}}</p>

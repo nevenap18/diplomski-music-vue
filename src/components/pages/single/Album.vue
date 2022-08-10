@@ -33,7 +33,7 @@ export default {
   },
   props: {
     id: {
-      type: String
+      type: [String, Number]
     }
   },
   computed: {
@@ -85,7 +85,7 @@ export default {
   align-items: center;
 }
 .song {
-  width: 60%;
+  width: 100%;
 }
 .title {
   margin: 30px 0;

@@ -8,6 +8,8 @@ import GenreRepo from '@/helpers/repo/Genre.js'
 const state = {
   favoriteAlbums: [],
   favoriteSongs: [],
+  favoriteSongsList: [],
+  favoriteAlbumsList: [],
   playlistsList: [],
   albums: [],
   artists: [],
@@ -17,12 +19,17 @@ const state = {
   showCreatePlaylistModal: false,
   editPlaylistModalData: {},
   showEditPlaylistModal: false,
-  searchQuery: {}
+  searchQuery: {
+    type: '',
+    term: ''
+  }
 }
 
 const getters = {
   favoriteAlbums: state => state.favoriteAlbums,
   favoriteSongs: state => state.favoriteSongs,
+  favoriteAlbumsList: state => state.favoriteAlbumsList,
+  favoriteSongsList: state => state.favoriteSongsList,
   playlistsList: state =>  {
     return state.playlistsList.map(playlist => ({
       title: playlist.title,
@@ -44,9 +51,11 @@ const getters = {
 
 const mutations = {
   SET_FAVORITE_ALBUMS: (state, payload) => {
+    state.favoriteAlbumsList = payload
     state.favoriteAlbums = payload.map(album => album.id)
   },
   SET_FAVORITE_SONGS: (state, payload) => {
+    state.favoriteSongsList = payload
     state.favoriteSongs = payload.map(song => song.songId)
   },
   UPDATE_FAVORITE_SONG: (state, payload) => {
@@ -107,11 +116,13 @@ const actions = {
   getFavorites: async ({commit}) => {
     const favs = new FavoritesRepo()
     await favs.getFavoriteSongs().then(res => {
+      console.log(res)
       commit('SET_FAVORITE_SONGS', res)
     }).catch(e => {
       console.log(e)
     })
     await favs.getFavoriteAlbums().then(res => {
+      console.log(res)
       commit('SET_FAVORITE_ALBUMS', res)
     }).catch(e => {
       console.log(e)
@@ -193,6 +204,7 @@ const actions = {
     commit('CLOSE_EDIT_PLAYLIST_MODAL')
   },
   setSearchQuery: ({commit}, payload) => {
+    console.log(payload,'PAYLOADDD')
     commit('SET_SEARCH_QUERY', payload)
   },
 }

@@ -35,7 +35,7 @@
             required
           >
 
-          <button class="button-login" type="submit" :class="{disabled: !username || !password}" @click="loginAction">Submit</button>
+          <button class="button-login" type="submit" :class="{disabled: !username || !password}" @click="loginAction">Login</button>
           <button class="button-register" @click="goToRegister">Go to Register page</button>
           <p v-if="errorLogin" class="error">{{errorMessage}}</p>
         </div>

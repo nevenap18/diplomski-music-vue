@@ -28,7 +28,7 @@ export default {
   },
   props: {
     id: {
-      type: String
+      type: [String, Number]
     }
   },
   computed: {

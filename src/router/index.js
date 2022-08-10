@@ -16,6 +16,7 @@ import Album from '@/components/pages/single/Album'
 import Genre from '@/components/pages/single/Genre'
 import Playlist from '@/components/pages/single/Playlist'
 import Settings from '@/components/pages/Settings'
+import Favorites from '@/components/pages/Favorites'
 import Search from '@/components/pages/Search'
 
 export const router = new Router({
@@ -81,7 +82,7 @@ export const router = new Router({
                 {
                   path: '/favorites',
                   name: 'Favorites',
-                  component: Home
+                  component: Favorites
                 },
                 {
                   path: '/albums',
