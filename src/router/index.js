@@ -6,6 +6,7 @@ import Register from '@/components/pages/Register'
 import Router from 'vue-router'
 import LoginMiddleware from '@/helpers/LoginMiddleware'
 import Home from '@/components/pages/Home'
+import Mobile from '@/components/pages/Mobile'
 import Page from '@/components/pages/Page'
 import Playlists from '@/components/pages/Playlists'
 import Albums from '@/components/pages/Albums'
@@ -47,6 +48,11 @@ export const router = new Router({
             const route = await LoginMiddleware(to)
             next(route)
           }
+        },
+        {
+          path: '/mobile',
+          name: 'Mobile',
+          component: Mobile
         },
         {
           path: '/',
@@ -127,6 +133,7 @@ export const router = new Router({
           ],
           beforeEnter: async (to, from, next) => {
             const route = await LoginMiddleware(to)
+            console.log(route)
             next(route)
           }
         }

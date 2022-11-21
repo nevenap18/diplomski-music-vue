@@ -1,35 +1,26 @@
 <template>
   <div>
-    <Description
+    <AlbumDescription
       v-if="albumInfo"
-      :title="albumInfo.title"
-      :year="albumInfo.year"
-      :image="albumInfo.image"
-      :artist="albumInfo.artist"
+      :album="albumInfo"
       :description="albumInfo.description"
-      :showFavButton="true"
       :isAlbumInFavorites="isInFavorites"
       @changeFav="addRemoveFavAlbum"
     />
-    <div v-if="albumInfo" class="songs">
-      <div class="title">
-        <h1>SONGS</h1>
-      </div>
-      <Song v-for="(song, index) in albumInfo.songs" class="song" :key="index" :artist="albumInfo.artist" :song="song" />
-    </div>
+    <SongList v-if="albumInfo" @playSong="setPlayContent" :songs="albumInfo.songs" :artist="albumInfo.artist" />
   </div>
 </template>
 <script>
 import AlbumRepo from '@/helpers/repo/Album.js'
-import Description from '@/components/components/Description'
-import Song from '@/components/components/Song'
+import AlbumDescription from '@/components/components/description/AlbumDescription'
 import {mapActions, mapGetters} from 'vuex'
+import SongList from '../../components/SongList.vue'
 
 export default {
   name: 'Album',
   components: {
-    Description,
-    Song
+    AlbumDescription,
+    SongList
   },
   props: {
     id: {
@@ -52,7 +43,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'addRemoveFavoriteAlbum'
+      'addRemoveFavoriteAlbum', 'setPlayerSongs'
     ]),
     async addRemoveFavAlbum () {
       try {
@@ -60,6 +51,14 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    setPlayContent () {
+      this.setPlayerSongs(this.albumInfo.songs.map(song => {
+        return {
+          song,
+          artist: this.albumInfo.artist
+        }
+      }))
     }
   },
   async created () {
@@ -75,22 +74,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-@import '@/styles/variables.scss';
-.songs {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.song {
-  width: 100%;
-}
-.title {
-  margin: 30px 0;
-  color: $forest;
-  font: $font-regular-bold;
-  display: inline-block;
-}
-</style>

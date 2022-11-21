@@ -1,33 +1,85 @@
 <template>
-  <button class="logout-button" @click="$emit('click')">{{ label }}</button>
+  <button :type="type" :disabled="disabled" :class="buttonClasses">{{ label }}</button>
 </template>
 
 <script>
-  export default {
-    name: 'MainWrapper',
-    props: {
-      label: {
-        type: String,
-        required: true
-      }
+export default {
+  name: 'Button',
+  props: {
+    type: {
+      type: String,
+      required: false,
+      default: 'button',
+      validator: type => ['button', 'submit'].includes(type)
+    },
+    styleType: {
+      type: String,
+      required: false,
+      default: 'Primary',
+      validator: type => ['accent', 'flat'].includes(type)
+    },
+    label: {
+      type: String,
+      required: true
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
+  computed: {
+    buttonClasses () {
+      return [
+        'button',
+        {
+          accent: this.styleType === 'accent',
+          flat: this.styleType === 'flat'
+        }
+      ]
     }
   }
+}
 </script>
-<style lang="scss" scoped>
+
+<style scoped lang="scss">
 @import '@/styles/variables.scss';
-button {
+.button {
   display: inline-block;
   padding: 10px 30px;
   background: transparent;
-  border: transparent;
-  border-radius: 4px;
-  background: $cream;
-  font: $font-regular-bold;
-  color: $forest;
+  border-radius: $radius;
   cursor: pointer;
-  &:hover {
+
+  &.accent {
+    font: $font-medium;
+    background: $color-accent;
+    color: $font-normal;
+
     transition: $transition;
-    background: $gold;
+
+    &:hover {
+      background: $color-accent-hover;
+    }
+
+    &:disabled {
+      background: $color-accent;
+      opacity: 0.4;
+      transition: $transition;
+      animation: none;
+      cursor: auto;
+    }
+  }
+  &.flat {
+    font: $font-medium;
+    color: $font-accent;
+    box-shadow: inset 0px 0px 0px 1px $color-accent;
+
+    &:hover {
+      transition: $transition;
+      color: $font-normal;
+      background-color: $color-accent;
+    }
   }
 }
 </style>

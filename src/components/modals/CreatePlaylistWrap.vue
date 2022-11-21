@@ -39,7 +39,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba($color: black, $alpha: 0.3);
+  background: rgba($color: $background, $alpha: 0.6);
   z-index: 522;
 }
 </style>

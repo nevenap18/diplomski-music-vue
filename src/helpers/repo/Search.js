@@ -8,7 +8,7 @@ export default class LpRepo {
     this.path = 'http://localhost:3000/api'
   }
   searchSongs (searchTerm) {
-    const path = `${this.path}/${SONG_PATH}?s={"title": {"$cont": "${searchTerm}"}}`
+    const path = `${this.path}/${SONG_PATH}?title=${searchTerm}`
     return Api.get(path).then(response => response.data).catch(err => Promise.reject(err))
   }
   searchAlbums (searchTerm) {

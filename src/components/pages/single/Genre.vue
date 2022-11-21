@@ -1,45 +1,46 @@
 <template>
   <div>
-    <Description
+    <GenreDescription
       v-if="genreInfo"
-      :title="genreInfo.title"
-      :year="genreInfo.year"
-      :image="genreInfo.image"
-      :artist="genreInfo.artist"
-      :description="genreInfo.description"
+      :genre="genreInfo"
     />
-    <div v-if="genreInfo" class="songs">
-      <div class="title">
-        <h1>SONGS</h1>
-      </div>
-      <Song v-for="(song, index) in genreInfo.songs" :key="index" :artist="song.artist" :song="song" />
-    </div>
+    <SongList @playSong="setPlayContent" v-if="genreInfo" :songs="genreInfo.songs" />
   </div>
 </template>
 <script>
 import GenreRepo from '@/helpers/repo/Genre.js'
-import Description from '@/components/components/Description'
-import Song from '@/components/components/Song'
+import GenreDescription from '@/components/components/description/GenreDescription'
+import SongList from '@/components/components/SongList'
+import {mapActions} from 'vuex'
 export default {
   name: 'Genre',
   components: {
-    Description,
-    Song
+    GenreDescription,
+    SongList
   },
   props: {
     id: {
       type: [String, Number]
     }
   },
-  computed: {
+  methods: {
+    ...mapActions([
+      'setPlayerSongs'
+    ]),
+    setPlayContent () {
+      this.setPlayerSongs(this.genreInfo.songs.map(song => {
+        return {
+          song,
+          artist: song.artist
+        }
+      }))
+    }
   },
   data () {
     return {
       genreInfo: null,
       loaded: false
     }
-  },
-  methods: {
   },
   async created () {
     const genre = new GenreRepo()
@@ -54,22 +55,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-@import '@/styles/variables.scss';
-.songs {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.song {
-  width: 60%;
-}
-.title {
-  margin: 30px 0;
-  color: $forest;
-  font: $font-regular-bold;
-  display: inline-block;
-}
-</style>

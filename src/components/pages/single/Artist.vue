@@ -1,18 +1,18 @@
 <template>
   <div>
-    <Description v-if="artistInfo" :title="artistInfo.name" :image="artistInfo.image" :description="artistInfo.description"/>
+    <ArtistDescription v-if="artistInfo" :artist="artistInfo"/>
     <CardRow v-if="artistInfo" :items="artistInfo.albums" :type="'albums'"/>
   </div>
 </template>
 <script>
 import ArtistRepo from '@/helpers/repo/Artist.js'
-import Description from '@/components/components/Description'
+import ArtistDescription from '@/components/components/description/ArtistDescription'
 import CardRow from '@/components/cards/CardRow.vue'
 
 export default {
   name: 'Artist',
   components: {
-    Description,
+    ArtistDescription,
     CardRow
   },
   props: {

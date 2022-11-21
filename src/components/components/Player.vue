@@ -1,18 +1,47 @@
 <template>
-<transition name="slide">
-  <div class="player" v-if="getCurrentSong">
-    <div class="controls">
-      <div class="playStopButton">
-        <!-- <img :src="playingState === 0 ? require('@/assets/play.png') : require('@/assets/pause.png')" @click="playPause"> -->
+  <transition name="slide">
+    <div class="player">
+      <div class="controls">
+        <svg class="previous" @click="changePreviousSong">
+          <use href="#previous"></use>
+        </svg>
+        <svg class="play-pause" @click="playPause">
+          <use :href="playingState === 0 ? '#play' : '#pause'"></use>
+        </svg>
+        <svg class="next" @click="changeNextSong">
+          <use href="#next"></use>
+        </svg>
+        <svg class="stop" @click="stopSong">
+          <use href="#stop"></use>
+        </svg>
       </div>
-      <div class="playStopButton">
-        <!-- <img :src="require('@/assets/stop.png')" @click="stopSong" /> -->
-      </div>
-      <div class="volume">
-        <div class="volumIcon">
-          <!-- <img :src="audioState === 0 ? require('@/assets/volumeoff.png') : require('@/assets/volumemax.png')" @click="switchVolume" /> -->
+      <div class="middle-container">
+        <div class="info-actions">
+          <div class="info">{{getCurrentSong.artist}} - {{getCurrentSong.title}}</div>
+          <div class="actions">
+            <svg class="heart"
+            :class="{active: isInFavorites}"
+            @click="addRemoveFavSong">
+              <use href="#heart"></use>
+            </svg>
+            <svg class="add-icon" @click="addToPlaylist">
+              <use href="#add"></use>
+            </svg>
+          </div>
         </div>
-        <div class="volumeBar">
+        <div class="progress-container">
+          <div class="time">{{currentStamp}}</div>
+          <div class="progress-bar" id="progress" @click="seek">
+            <div :style="{ width: percentComplete + '%' }" class="progress-bar-thumb"></div>
+          </div>
+          <div class="time">{{durationSong}}</div>
+        </div>
+      </div>
+      <div class="volume-container">
+        <svg class="volume-icon" @click="switchVolume">
+          <use :href="audioState === 0 ? '#volumeoff' : '#volumeon'"></use>
+        </svg>
+        <div class="volume-bar">
           <input
             type="range"
             min="0"
@@ -24,23 +53,13 @@
         </div>
       </div>
     </div>
-    <div v-if="getCurrentSong" class="info">{{getCurrentSong.artist.name}} - {{getCurrentSong.title}}</div>
-      
-    <div class="progress-bar-holder">
-      <div class="time">{{currentStamp}}</div>
-      <div class="progress-bar" id="progress" @click="seek">
-        <div :style="{ width: percentComplete + '%' }" class="progress-bar-thumb"></div>
-      </div>
-    <div class="time">{{durationSong}}</div>
-    </div>
-  </div>
-</transition>
+  </transition>
 </template>
 
 <script>
-import { mapGetters } from "vuex"
+import { mapGetters, mapActions } from 'vuex'
 export default {
-  name: "Player",
+  name: 'Player',
   data() {
     return {
       currentVolume: 1,
@@ -53,20 +72,22 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["getCurrentSong"]),
+    ...mapGetters(['getCurrentSong', 'favoriteSongs', 'playerSongs']),
     percentComplete() {
       return (this.currentSeconds / this.audio.duration) * 100
     },
     currentS(){
-      let currS = Math.floor(this.currentSeconds)
+      const currS = Math.floor(this.currentSeconds)
       if(currS < 10) {
         return '0' + currS
-      } else{
+      } else if (currS % 60 === 0) {
+        return '00'
+      } else {
         return currS
       }
     },
     currentM() {
-      let currS = Math.floor(this.currentSeconds/60)
+      const currS = Math.floor(this.currentSeconds / 60)
       if(currS < 10) {
         return '0' + currS
       } else{
@@ -74,17 +95,16 @@ export default {
       }
     },
     currentStamp() {
-      return this.currentM + ':' + this.currentS
+      return `${this.currentM}:${this.currentS}`
+    },
+    isInFavorites () {
+      return !!this.favoriteSongs.find(id => id === this.getCurrentSong.songId)
+    },
+    getCurrentSongIndex () {
+      return this.playerSongs.findIndex(songObj => this.getCurrentSong.songId === songObj.song.songId )
     }
   },
   watch: {
-    getCurrentSong(to, from) {
-      if (to !== from) {
-        if (this.audio) this.audio.src = null
-        this.initializeSong()
-        this.playPause()
-      }
-    },
     currentVolume() {
       this.audio.volume = this.currentVolume
       if(this.audio.volume > 0){
@@ -92,15 +112,30 @@ export default {
       } else {
         this.audioState = 0
       }
+    },
+    getCurrentSong: {
+      handler (to, from) {
+        if (to !== from) {
+          if (this.audio) {
+            this.audio.src = null
+          }
+          this.initializeSong()
+          this.playPause()
+        }
+      },
+      immediate: true
     }
   },
   methods: {
+    ...mapActions([
+      'openAddPlaylistModal', 'addRemoveFavoriteSong', 'updateCurrentSong'
+    ]),
     initializeSong(){
-      this.audio = new Audio(this.getCurrentSong.preview)
+      this.audio = new Audio(this.getCurrentSong.url)
       this.audio.volume = this.currentVolume
-      this.audio.addEventListener("loadedmetadata", this.generateDuration)
-      this.audio.addEventListener("timeupdate", this.update)
-      this.audio.addEventListener("ended", this.ended) 
+      this.audio.addEventListener('loadedmetadata', this.generateDuration)
+      this.audio.addEventListener('timeupdate', this.update)
+      this.audio.addEventListener('ended', this.ended)
     },
     playPause() {
       if (this.audio.paused) {
@@ -118,42 +153,74 @@ export default {
       this.playingState = 0
     },
     stopSong() {
-      this.audio.removeEventListener("timeupdate", this.update)
-      this.audio.removeEventListener("ended", this.ended)
-      this.$store.dispatch("stopSong")
+      this.audio.removeEventListener('timeupdate', this.update)
+      this.audio.removeEventListener('ended', this.ended)
+      this.$store.dispatch('stopSong')
       this.audio.src =  null
-      
     },
-    switchVolume() {
+    switchVolume () {
       if (this.audioState === 1) {
         this.previousVolume = this.currentVolume
         this.currentVolume = 0
         this.audioState = 0
-        return
       } else {
         this.currentVolume = this.previousVolume
         this.audioState = 1
       }
     },
-    seek(e) {
-      let progressBar = document.querySelector("#progress")
-      let outerCoordinates = progressBar.getBoundingClientRect()
-      let seekedPercent = (this.audio.duration * (e.clientX - outerCoordinates.left)) / outerCoordinates.width
+    seek (e) {
+      const progressBar = document.querySelector('#progress')
+      const outerCoordinates = progressBar.getBoundingClientRect()
+      const seekedPercent = (this.audio.duration * (e.clientX - outerCoordinates.left)) / outerCoordinates.width
       this.currentSeconds = seekedPercent
       this.audio.currentTime = seekedPercent
     },
-    generateDuration() {
-      let durationMinutes = Math.floor(this.audio.duration/60)
-      let durationSeconds = Math.floor(this.audio.duration)
+    restart () {
+      this.audio.currentTime = 0
+      if (this.audio.paused) {
+        this.audio.play()
+        this.playingState = 1
+      }
+    },
+    generateDuration () {
+      const duration = this.audio.duration
+      let durationMinutes = Math.floor(duration / 60)
+      let durationSeconds = Math.floor(duration)
 
-      if(durationMinutes < 10) {
+      if (durationMinutes < 10) {
         durationMinutes = '0' + durationMinutes
       }
-      if(durationSeconds < 10) {
+      if (durationSeconds < 10) {
         durationSeconds = '0' + durationSeconds
+      } else if (durationSeconds % 60 === 0) {
+        durationSeconds = '00'
       }
-      this.durationSong = durationMinutes + ':' + durationSeconds
+
+      this.durationSong = `${durationMinutes}:${durationSeconds}`
+    },
+    addToPlaylist () {
+      this.openAddPlaylistModal({
+        songId: this.getCurrentSong.songId
+      })
+    },
+    async addRemoveFavSong () {
+      try {
+        await this.addRemoveFavoriteSong({favId: this.getCurrentSong.songId, value: !this.isInFavorites})
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    changeNextSong () {
+      const indexOfNext = this.getCurrentSongIndex + 1
+      const nextSong = this.playerSongs[indexOfNext] || this.playerSongs[0]
+      this.updateCurrentSong({song: nextSong.song, artist: nextSong.artist})
+    },
+    changePreviousSong () {
+      const indexOfNext = this.getCurrentSongIndex - 1 
+      const nextSong = this.playerSongs[indexOfNext] || this.playerSongs[this.playerSongs.length - 1]
+      this.updateCurrentSong({song: nextSong.song, artist: nextSong.artist})
     }
+
   }
 }
 </script>
@@ -162,7 +229,7 @@ export default {
 @import '@/styles/variables.scss';
 
 .slide-enter-active, .slide-leave-active {
-  transition: transform 0.6s;
+  transition: transform $transition;
 }
 
 .slide-enter, .slide-leave-to {
@@ -174,157 +241,153 @@ export default {
 }
 
 .player {
-  height: 100px;
+  z-index: 11111;
+  height: 130px;
   width: 100vw;
   min-width: 100vw;
   position: fixed;
   bottom: 0;
-  background-color: blue;
-  border-top: 1px solid blue;
+  background-color: $input-background;
+  border-top: 2px solid $color-dull;
   display: flex;
+  flex-direction: row;
+  justify-content: space-around;
   align-items: center;
+}
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  svg {
+    width: 30px;
+    height: 30px;
+    fill: $color-normal;
+    cursor: pointer;
 
-  .controls {
+    &:hover {
+      transition: $transition;
+      fill: $color-accent;
+    }
+  }
+  .stop {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.middle-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 500px;
+  .info-actions {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    height: 100%;
-    width: 300px;
-    img {
-      cursor: pointer;
-      width: 20px;
+    width: 45vw;
+    min-width: 350px;
+    margin-bottom: 15px;
+    .info {
+      font: $font-medium-bold;
+      color: $font-normal;
     }
-    .playStopButton {
+    .actions {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 25%;
-      height: 100%;
-
-      &:active {
-        background-color: blue;
-        transition: 0.1s;
+      gap: 15px;
+      svg {
+        width: 24px;
+        height: 24px;
+        fill: $color-normal;
+        cursor: pointer;
+        &:hover {
+          transition: $transition;
+          fill: $color-accent;
+        }
       }
-    }
-    .volume {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 50%;
-      height: 100px;;
-
-      &:active {
-        background-color: blue;
-        transition: 0.1s;
-      }
-      .volumeBar {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 70%;
-
-        .slider {
-          -webkit-appearance: none;
-          width: 70%;
-          height: 7px;
-          border-radius: 5px;
-          background: blue;
-          outline: none;
-          cursor: pointer;
-
-          &::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 17px;
-            height: 17px;
-            border-radius: 50%;
-            background: white;
-            cursor: pointer;
+      .heart {
+        &.active {
+          fill: $favorite;
+          &:hover {
+            transition: $transition;
+            fill: $favorite-hover;
           }
+        }
+        &:hover {
+          transition: $transition;
+          fill: $color-normal;
         }
       }
     }
   }
-  .info {
+  .progress-container {
     display: flex;
+    justify-content: center;
     align-items: center;
-    height: 100%;
-    max-width: 200px;
-    min-width: 150px;
-    font-size: 15px;
-  }
-  .progress-bar-holder {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    width: 30vw;
 
+    .time {
+      font: $font-regular;
+      color: $font-normal;
+    }
     .progress-bar {
       position: relative;
       display: flex;
       align-items: center;
-      width: 80%;
+      width: 45vw;
+      min-width: 350px;
       height: 7px;
       margin-left: 10px;
       margin-right: 10px;
-      background-color: blue;
+      background-color: $color-dull;
       border-radius: 5px;
       cursor: pointer;
 
       .progress-bar-thumb {
         position: absolute;
         height: 100%;
-        background-color: white;
+        background-color: $color-accent;
         left: 0;
         border-radius: 5px;
       }
     }
   }
 }
-// @media screen and (max-width: $break-small) {
-//   .volume {
-//     display: none !important;
-//   }
-//   .player {
-//     flex-direction: column;
-//     justify-content: space-around;
-//     width: 100%;
-//     height: 140px;
-//     padding: 0;
-//     position:fixed;
-//     bottom:0;
-//     left: 0;
-//     right: 0;
-//     .controls {
-//       margin: 10px;
-//       font-size: 10px;
-//       width: calc(100vw / 1.1);
-//       justify-content: center;
-//         img {
-//           width: 20px;
-//         }
-//     }
-//     .info {
-//       font-size: 15px;
-//       justify-content: center;
-//     }
-//     .progress-bar-holder {
-//       width: 100vw;
-//       //margin: 15px;
-//       justify-content: space-around;
-//       align-items: center;
-//       padding: 10px;
-//       .progress-bar {
-//         width: 60%;
-//         margin: 0;
-//       }
-//       .time {
-//         height: 15px;
-//         margin: 5px;
-//       }
-//     }
-    
-//   }
-  
-// }
+.volume-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    .volume-icon {
+      width: 35px;
+      height: 35px;
+      fill: $color-normal;
+    }
+
+    .volume-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80%;
+
+      .slider {
+        -webkit-appearance: none;
+        width: 80%;
+        height: 7px;
+        border-radius: 5px;
+        background-color: $color-dull;
+        outline: none;
+        cursor: pointer;
+
+        &::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 17px;
+          height: 17px;
+          border-radius: 50%;
+          background: $color-accent;
+        }
+      }
+    }
+  }
 </style>

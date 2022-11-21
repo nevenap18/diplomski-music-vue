@@ -1,25 +1,32 @@
 <template>
   <div class="row">
-    <div class="title" @click="$router.push({path: '/' + type})">
+    <div v-if="!hideTitle" class="title" :class="{'hover-title': !disableTitleNavigation}" @click="goTo">
       <h1>{{ type.toUpperCase() }}</h1>
     </div>
     <div class="collection">
-      {{items.lenght}}
+      <slot name="action-card">
+      </slot>
       <div v-for="(item, index) in items" :key="index">
-        <Card class="card-item" :item="item" :type="type" :index="index"/>
+        <component
+          class="card-item"
+          :index="index"
+          :is="getComponent()"
+          :type="type"
+          :item="item"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Card from './Card.vue'
+import AlbumCard from './AlbumCard.vue'
+import GenreCard from './GenreCard.vue'
+import ArtistCard from './ArtistCard.vue'
+import PlaylistCard from './PlaylistCard.vue'
 
 export default {
   name: 'CardRow',
-  components: {
-    Card
-  },
   props: {
     items: {
       type: Array,
@@ -28,6 +35,42 @@ export default {
     type: {
       type: String,
       required: true
+    },
+    disableTitleNavigation: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    hideTitle: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
+  methods: {
+    getComponent () {
+      console.log(this.items, 'iiiii')
+      if (this.type === 'albums') {
+        return AlbumCard
+      }
+      if (this.type === 'artists') {
+        return ArtistCard
+      }
+      if (this.type === 'genres') {
+        return GenreCard
+      }
+      if (this.type === 'playlists') {
+        return PlaylistCard
+      }
+      if (this.type === 'favorite albums') {
+        return AlbumCard
+      }
+    },
+    goTo () {
+      const path = '/' + this.type
+      if (this.$route.path !== path && !this.disableTitleNavigation) {
+          this.$router.push({path})
+      }
     }
   }
 }
@@ -35,15 +78,18 @@ export default {
 
 <style scoped lang="scss">
 @import '@/styles/variables.scss';
-.content {
-}
+
 .title {
-  margin: 30px 0;
-  color: $forest;
+  margin-bottom: 15px;
+  margin-top: 35px;
+  color: $font-normal;
   font: $font-regular-bold;
   display: inline-block;
+}
+.hover-title {
   &:hover {
-    color: $moss;
+    transition: $transition;
+    color: $font-accent;
     cursor: pointer;
   }
 }
@@ -52,8 +98,8 @@ export default {
   grid-auto-columns: max-content;
   grid-auto-flow: dense;
   grid-auto-rows: minmax(100px, auto);
-  grid-gap: 25px;
-  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 30px;
+  grid-template-columns: repeat(5, 1fr);
   margin: 20px auto;
   max-width: 100%;
 }

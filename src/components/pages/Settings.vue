@@ -1,60 +1,69 @@
 <template>
   <div class="settings">
-    <img
-      v-if="profile"
-      class="avatar"
-      alt="avatar"
-      :src="profile.image"
-    />
-    <div v-if="profile" class="content">
-      <label for="email"><b>Email:</b></label>
-      <input
-        type="text"
-        placeholder="email"
-        id="email"
-        :value="profile.email"
-        @input="editedProfile.email = $event.target.value"
-        autocomplete="off"
-        required
-      >
-      <label for="username"><b>Username:</b></label>
-      <input
-        type="text"
-        placeholder="username"
-        id="username"
-        :value="profile.username"
-        @input="editedProfile.username = $event.target.value"
-        autocomplete="off"
-        required
-      >
-      <label for="pass"><b>Password:</b></label>
-      <input
-        type="password"
-        placeholder="New password"
-        id="pass"
-        @input="editedProfile.password = $event.target.value"
-        autocomplete="off"
-        required
-      >
-      <button class="submit-btn" :class="{disabled: !isChanged}" @click="editAction">Login</button>
+    <div class="avatar-container">
+      <img
+        v-if="profile"
+        class="avatar"
+        alt="avatar"
+        :src="profile.image"
+      />
+      <span class="username">{{profile.username}}</span>
     </div>
+    <div class="info">Login details</div>
+    <form v-if="profile" @submit.prevent class="content">
+      <Input
+          class="input"
+          label="Email:"
+          placeholder="Email"
+          id="title"
+          :value="profile.email"
+          @focus="resetError"
+          @change="editedProfile.email = $event"
+          autocomplete="off"
+        />
+        <Input
+          class="input"
+          type="text"
+          label="Username:"
+          placeholder="Username"
+          id="username"
+          :value="profile.username"
+          @focus="resetError"
+          @change="editedProfile.username = $event"
+          autocomplete="off"
+        />
+        <Input
+          type="text"
+          label="New password:"
+          placeholder="New password"
+          id="new-password"
+          @focus="resetError"
+          @change="editedProfile.password = $event"
+          autocomplete="off"
+          :requiredField="false"
+        />
+        <Button type="submit" styleType="accent" label="Save" @click.native="editAction"></Button>
+        <Button styleType="flat" label="Logout" @click.native="logout"></Button>
+        <p v-if="error" class="error">{{errorMessage}}</p>
+    </form>
   </div>
 </template>
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
+import Input from '../components/Input.vue'
+import Button from '../components/Button.vue'
 export default {
   name: 'Settings',
   components: {
+    Input,
+    Button
   },
   props: {
   },
   computed: {
     ...mapGetters([
       'profile'
-    ]),
-    isChanged () {
-      return this.profile.username !== this.editedProfile.username && this.profile.email !== this.editedProfile.email || this.editedProfile.password.length !== 0
-    }
+    ])
   },
   data () {
     return {
@@ -62,81 +71,94 @@ export default {
         username: '',
         email: '',
         password: ''
-      }
+      },
+      error: false,
+      errorMessage: ''
     }
   },
   methods: {
+    ...mapActions([
+      'editProfile'
+    ]),
     editAction () {
-      console.log(this.editedProfile)
+      this.editProfile(this.editedProfile).catch(e => {
+        this.error = true
+        this.errorMessage = e.response.data.message[0]
+      })
+    },
+    resetError () {
+      this.error = false
+      this.errorMessage = ''
+    },
+    logout () {
+      document.cookie = 'token=; expires=Thu, 01-Jan-1970 00:00:01 GMT'
+      setTimeout(() => {
+        this.$router.push({name: 'Login'})
+      }, 1000)
     }
   },
   created () {
     this.editedProfile.email = this.profile.email
     this.editedProfile.username = this.profile.username
-    console.log(this.editedProfile)
   }
 }
 </script>
 <style lang="scss" scoped>
 @import '@/styles/variables.scss';
-.avatar {
-  width: 20%;
+.avatar-container {
+  display: flex;
+  align-items: center;
   margin-bottom: 30px;
+  width: 100%;
+}
+.avatar {
+  width: 30%;
+  margin-right: 30px;
   object-fit: cover;
   border-radius: 50%;
+}
+.username {
+  font: $font-large-bold;
+  color: $font-normal;
+}
+.info {
+  font: $font-large-bold;
+  color: $font-dull;
+  border-bottom: 2px solid $color-dull;
+  width: 100%;
+  padding: 10px 0;
+  margin-bottom: 20px;
 }
 .content {
   display: flex;
   flex-direction: column;
-  width: 40%;
+  width: 100%;
 }
 .settings {
-  font: $font-regular-bold;
-  color: $forest;
-  padding-top: 90px;
-  width: 100%;
+  margin-top: 90px;
+  margin-left: 150px;
+  min-width: 300px;
+  max-width: 500px;
+  width: 35%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-input[type=text], input[type=password] {
-  outline: none;
-  background: transparent;
-  border-width: 0 0 2px;
-  border-color: $forest;
-  transition: $transition;
-  width: 100%;
-  padding: 5px 5px;
-  margin: 15px 0 40px 0;
-  display: inline-block;
-  box-sizing: border-box;
-  font: $font-regular;
-  color: $forest;
+.input-text {
+  margin-top: 40px;
+  display: block;
 }
-input:focus {
-  border-color: $moss;
-}
-input:-webkit-autofill { 
-  -webkit-background-clip: text;
-  background-clip: text;
-}
+
 button {
-  display: inline-block;
-  padding: 10px 30px;
-  margin-right: 15px;
-  background: transparent;
-  border: transparent;
-  border-radius: 4px;
-  background: $moss;
-  font: $font-regular;
-  color: $cream;
-  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-top: 24px;
 }
-.disabled {
-  cursor: auto;
-  pointer-events: none;
-  opacity: 0.7;
-  transition: $transition;
+.error {
+  color: $error;
+  &:first-letter {
+    text-transform: uppercase;
+  }
 }
 </style>

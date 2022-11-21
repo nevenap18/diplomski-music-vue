@@ -93,7 +93,7 @@ export default {
 .description-container {
   display: flex;
   padding: 30px;
-  background: linear-gradient($gold, $cream);
+  background: linear-gradient($background, $background-alternate);
 }
 img {
   max-width: 300px;
@@ -134,10 +134,10 @@ svg {
   }
 }
 .fav-svg.active {
-  fill: red;
+  fill: $favorite;
 }
 .delete-svg:hover {
-  transition: fill 0.2s ease;
-  fill: red !important;
+  transition: fill $transition;
+  fill: $maroon !important;
 }
 </style>

@@ -1,8 +1,15 @@
 
 import Auth from './repo/Auth.js'
 import Api from './api/Api'
+import mobileDetector from '../helpers/mobileDetector.js'
+
 export default async function (to) {
   // get stored token
+  const deviceType = mobileDetector.deviceType
+  console.log(deviceType, 'aaaaaaaaaa')
+  if (deviceType === 'mobile') {
+    return Promise.resolve('/mobile')
+  }
   const token = document.cookie.match('(^|;)\\s*' + 'token' + '\\s*=\\s*([^;]+)')?.pop() || ''
 
   // if no token redirect to Login page

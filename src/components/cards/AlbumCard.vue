@@ -1,9 +1,10 @@
 <template>
   <div>
-    <div class="card" @click="$router.push('/' + type + '/' + item.id)">
+    <div class="card" @click="$router.push('/albums/' + item.id)">
       <img :alt="item.title" class="image" :src="item.image" />
       <div class="card-title">
-          <div class="title">{{ item.title || item.name }}</div>
+          <div v-if="item.title" class="title">{{ item.title }}</div>
+          <div v-if="item.artist" class="artist">by {{ item.artist.name }}</div>
       </div>
     </div>
   </div>
@@ -11,7 +12,7 @@
 
 <script>
   export default {
-    name: 'Card',
+    name: 'AlbumCard',
     props: {
       item: {
         type: Object,
@@ -19,10 +20,6 @@
       },
       index: {
         type: Number
-      },
-      type: {
-        type: String,
-        required: true
       }
     }
   }
@@ -30,30 +27,22 @@
 
 <style lang="scss" scoped>
 @import '@/styles/variables.scss';
-
-.card{
-  // box-shadow: 0 0 8px 6px rgba(0,0,0,0.1);
-
-  @keyframes fadeIn {
-    0% {
-    opacity: 0.2;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
+.card {
   &:hover {
     cursor: pointer;
-    transform: scale(1.03);
     transition: $transition;
+
+    .image {
+      transform: scale(1.03);
+      transition: $transition;
+    }
     .title {
-      color: $font-normal;
+      color: $font-accent;
       transition: $transition;
     }
   }
 }
 .image {
-  box-shadow: 0 0 8px 6px rgba(0,0,0,0.08);
   background-size: cover;
   width: 100%;
   height: 100%;
@@ -61,7 +50,11 @@
   border-radius: $radius;
 }
 .title {
-  font: $font-regular-bold;
+  font: $font-medium-bold;
   color: $font-normal;
+}
+.artist {
+  font: $font-regular-bold;
+  color: $font-dull;
 }
 </style>

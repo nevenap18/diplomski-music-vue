@@ -4,7 +4,6 @@
       <span class="title" @click="goToPlaylist">{{playlist.title}}</span>
     </div>
     <div class="actions">
-      {{isInPlaylist}}
       <svg
         class="add-svg"
         @click="addRemoveFromPlaylist"
@@ -27,6 +26,10 @@ export default {
     songId: {
       type: Number,
       required: true
+    },
+    num: {
+      type: Number,
+      required: true
     }
   },
   computed: {
@@ -42,7 +45,7 @@ export default {
       if (this.$route.name === 'Playlist' && parseInt(this.$route.params.id, 10) === this.playlist.id) {
         return
       } else {
-        this.$router.push({name: 'Playlist', props: {id: this.playlist.id}})
+        this.$router.push({name: 'Playlist', params: {id: this.playlist.id}})
       }
       this.$emit('closePopup')
     },
@@ -67,14 +70,15 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font: $font-regular;
-  color: $cream;
-  border-bottom: 1px solid $cream;
+  font: $font-medium;
+  color: $font-normal;
+  border-bottom: 1px solid $color-dull;
 }
 .title {
   cursor: pointer;
   &:hover {
-    color: $cream;
+    transition: $transition;
+    color: $font-accent;
   }
 }
 .actions {
@@ -85,8 +89,12 @@ export default {
 svg {
   width: 17px;
   height: 17px;
-  fill: $cream;
+  fill: $color-normal;
   margin-left: 10px;
   cursor: pointer;
+  &:hover {
+    transition: $transition;
+    fill: $color-accent;
+  }
 }
 </style>

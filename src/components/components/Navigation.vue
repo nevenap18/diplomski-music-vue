@@ -1,73 +1,60 @@
 <template>
   <div class="navigation">
     <div class="container">
-      <div class="logo" @click="goTo('/')">
+      <router-link active-class="active" class="logo" tag="div" to="/" exact>
         <svg class="logo-svg">
           <use href="#logo"></use>
         </svg>
         <span class="title">MusicApp</span>
-      </div>
+      </router-link>
       <div class="links">
-        <div @click="goTo('/')" class="link">
+        <span class="menu">MENU</span>
+        <router-link active-class="active" class="link" tag="div" to="/" exact>
           <svg class="link-svg">
             <use href="#home"></use>
           </svg>
           <span>HOME</span>
-        </div>
-        <div @click="goTo('/playlists')" class="link">
+        </router-link>
+        <router-link active-class="active" class="link" tag="div" to="/playlists" exact>
           <svg class="link-svg">
             <use href="#playlists"></use>
           </svg>
           <span>PLAYLISTS</span>
-        </div>
-        <div @click="goTo('/favorites')" class="link">
+        </router-link>
+        <router-link active-class="active" class="link" tag="div" to="/favorites" exact>
           <svg class="link-svg">
             <use href="#favorites"></use>
           </svg>
           <span>FAVORITES</span>
-        </div>
-        <div @click="goTo('/albums')" class="link">
+        </router-link>
+        <router-link active-class="active" class="link" tag="div" to="/albums" exact>
           <svg class="link-svg">
             <use href="#albums"></use>
           </svg>
           <span>ALBUMS</span>
-        </div>
-        <div @click="goTo('/artists')" class="link">
+        </router-link>
+        <router-link active-class="active" class="link" tag="div" to="/artists" exact>
           <svg class="link-svg">
             <use href="#artists"></use>
           </svg>
           <span>ARTISTS</span>
-        </div>
-        <div @click="goTo('/genres')" class="link">
+        </router-link>
+        <router-link active-class="active" class="link" tag="div" to="/genres" exact>
           <svg class="link-svg">
             <use href="#genres"></use>
           </svg>
           <span>GENRES</span>
-        </div>
-      </div>
-      <input type="text" id="search-input"
-        placeholder="Search"
-        @keydown="search" maxLength="50"
-      >
-      <div class="bottom-actions">
-        <div class="profile">
-          <img class="profile-img" @click="dropdownAction" v-if="profile" alt="avatar" :src="profile.image"/>
-          <ProfileDropdown v-if="showDropdown" @closeDropdown="showDropdown = false" />
-        </div>
+        </router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ProfileDropdown from './ProfileDropdown'
 import {mapGetters, mapActions} from 'vuex'
 
 export default {
   name: 'Navigation',
-  components: {
-    ProfileDropdown
-  },
   computed: {
     ...mapGetters([
       'profile'
@@ -81,21 +68,15 @@ export default {
   methods: {
     ...mapActions(['setSearchQuery']),
     search (event) {
-      if (event.keyCode === 13) {
-        this.setSearchQuery({ type: this.$route.query.type || 'SONGS', term: event.target.value})
+      const enterKey = 13
+      if (event.keyCode === enterKey) {
+        const type = this.$route.query.type || 'SONGS'
         if (this.$route.name !== 'Search') {
-          console.log('aaaaaaaaaaaaaaaaaaaaaaaa')
-          this.$router.push({name: 'Search'})
+          this.$router.push({name: 'Search', query: { type, term: event.target.value}})
+        } else {
+          this.setSearchQuery({ type, term: event.target.value})
         }
       }
-    },
-    goTo (path) {
-      if (this.$route.path !== path) {
-        this.$router.push({path})
-      }
-    },
-    dropdownAction () {
-      this.showDropdown = !this.showDropdown
     }
   }
 }
@@ -103,39 +84,38 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/variables.scss';
 .navigation {
-  height: 90px;
-  min-width: 100%;
+  height: 100vh;
+  width: 240px;
   display: flex;
   justify-content: center;
-  background: $forest;
+  background: $background-alternate;
   z-index: 520;
-  position: absolute;
-  top: 0;
+  flex-basis: 20%;
+  min-width: 240px;
 }
 .container {
   width: 100%;
   height: 100%;
-  max-width: 2024px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 70px;
   align-items: center;
 }
 .logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 15px;
+  margin: 40px;
   cursor: pointer;
   .logo-svg {
-    width: 40px;
-    height: 40px;
-    fill: $cream;
+    width: 45px;
+    height: 45px;
+    fill: $color-normal;
     margin-right: 10px;
   }
   .title {
     font: $font-large-bold;
-    color: $cream;
+    color: $font-normal;
   }
   &:hover {
     transition: $transition;
@@ -144,6 +124,12 @@ export default {
 }
 .links {
   display: flex;
+  flex-direction: column;
+  width: 70%;
+}
+.menu {
+  font: $font-regular;
+  color: $font-dull;
 }
 .link {
   width: 100%;
@@ -151,47 +137,29 @@ export default {
   min-height: 60px;
   max-height: 100px;
   font: $font-regular-bold;
-  color: $cream;
+  color: $font-normal;
   display: flex;
   align-items: center;
   transition: $transition;
   .link-svg {
-    fill: $cream;
+    fill: $color-normal;
     transition: $transition;
     width: 24px;
     height: 24px;
-    margin-left: 25px;
-    margin-right: 5px;
+    margin-right: 7px;
   }
   &:hover {
     cursor: pointer;
-    color: $dark-cream;
+    color: $font-accent;
     .link-svg {
-      fill: $dark-cream;
+      fill: $color-accent;
     }
   }
-}
-.bottom-actions {
-  padding: 0 25px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.settings-button {
-  margin-right: 10px;
-}
-.profile {
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  background-color: grey;
-  position: relative;
-}
-.profile-img {
-  object-fit: cover;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  cursor: pointer;
+  &.active {
+    color: $font-accent;
+    .link-svg {
+      fill: $color-accent;
+    }
+  }
 }
 </style>

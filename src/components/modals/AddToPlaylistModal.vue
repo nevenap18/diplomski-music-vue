@@ -1,6 +1,7 @@
+
 <template>
-  <div class="container" @click.self="closeModal">
-    <div class="modal">
+  <div :class="{hidden: showCreatePlaylistModal}" class="container" @click.self="closeAddPlaylistModal">
+    <div class="edit-modal">
       <div class="container-top">
         <svg
           class="close-svg"
@@ -14,23 +15,21 @@
         <PlaylistRow
           v-for="(playlist, index) in playlistsList"
           :key="index"
+          :num="index+1"
           :songId="playlistModalData.songId"
           :playlist="playlist"
           @closePopup="closeAddPlaylistModal"
         />
       </div>
-      <div class="create">
-        <button class="button-create" @click="openCreatePlaylistModal">Create Playlist</button>
-      </div>
+      <Button styleType="accent" label="Create playlist" @click.native="openCreatePlaylistModal"></Button>
     </div>
-    <CreatePlaylistModal v-if="showCreatePlaylistModal" />
   </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from 'vuex'
 import PlaylistRow from '@/components/components/PlaylistRow'
-import CreatePlaylistModal from '@/components/modals/CreatePlaylistModal'
+import Button from '../components/Button.vue'
 export default {
   name: 'AddToPlaylistModal',
   data () {
@@ -39,7 +38,7 @@ export default {
   },
   components: {
     PlaylistRow,
-    CreatePlaylistModal
+    Button
   },
   computed: {
     ...mapGetters([
@@ -70,6 +69,7 @@ export default {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 @import '@/styles/variables.scss';
 .container {
@@ -81,57 +81,76 @@ export default {
   background: rgba($color: black, $alpha: 0.3);
   z-index: 522;
 }
-.modal {
+.edit-modal {
   padding: 20px;
   border-radius: 3px;
   transform: translate(-50%, -50%);
   position: absolute;
   top: 50%;
   left: 50%;
-  background: $moss;
-  width: 40vw;
-  height: 60vh;
-  max-height: 800px;
+  background: $background-alternate;
+  width: 30vw;
   max-width: 500px;
-  min-height: 400px;
   min-width: 300px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-}
-.playlists {
-  max-height: 500px;
-  width: 100%;
-  overflow-y: auto;
+  border-radius: $radius;
 }
 .container-top {
   width: 100%;
   display: flex;
-  flex-direction: column;
+  height: 50px;
   justify-content: center;
   align-items: center;
+  position: relative;
+  font: $font-medium-bold;
+  color: $font-normal;
+  margin-bottom: 50px;
 }
-.svg {
-  align-self: center;
+.playlists {
+  width: 80%;
+  max-height: 400px;
+  overflow-y: auto;
 }
-svg {
-  width: 17px;
-  height: 17px;
-  fill: $cream;
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: $background-alternate;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: $color-normal;
+  border-radius: 4px;
+}
+button {
+  display: block;
+  width: 80%;
+  margin-top: 24px;
+  margin-bottom: 50px;
+}
+.hidden {
+  visibility: hidden;
+}
+.close-svg {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 35px;
+  height: 35px;
+  fill: $color-normal;
   margin-left: 10px;
   cursor: pointer;
 }
-button {
-  display: inline-block;
-  padding: 10px 30px;
-  margin-right: 15px;
-  background: transparent;
-  border: transparent;
-  border-radius: 4px;
-  background: $forest;
-  font: $font-regular;
-  color: $cream;
-  cursor: pointer;
+.error {
+  color: $error;
+  &:first-letter {
+    text-transform: uppercase;
+  }
 }
 </style>

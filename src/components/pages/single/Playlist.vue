@@ -1,35 +1,24 @@
 <template>
   <div>
-    <Description
+    <PlaylistDescription
       v-if="loaded"
-      :title="playlistInfo.title"
-      :image="playlistInfo.image"
-      :description="playlistInfo.description"
-      :isPlaylist="true"
+      :playlist="playlistInfo"
       @delete="deletePlaylist"
       @edit="openEditPlaylistModal({playlistId: playlistInfo.id, title: playlistInfo.title, description: playlistInfo.description})"
     />
-    <div v-if="playlistInfo" class="songs">
-      <div class="title">
-        <h1>SONGS</h1>
-      </div>
-      <div class="songs-container" v-if="playlistInfo.songs.length > 0">
-        <Song v-for="(song, index) in playlistInfo.songs" class="song" :key="index" :artist="song.artist" :song="song" />
-      </div>
-      <span class="message" v-else>Sorry, playlist is empty.</span>
-    </div>
+    <SongList @playSong="setPlayContent" v-if="playlistInfo" :songs="playlistInfo.songs" />
   </div>
 </template>
 <script>
 import PlaylistRepo from '@/helpers/repo/Playlist.js'
-import Description from '@/components/components/Description'
-import Song from '@/components/components/Song'
+import PlaylistDescription from '@/components/components/description/PlaylistDescription'
+import SongList from '@/components/components/SongList'
 import {mapActions, mapGetters} from 'vuex'
 export default {
   name: 'Playlist',
   components: {
-    Description,
-    Song
+    PlaylistDescription,
+    SongList
   },
   props: {
     id: {
@@ -49,7 +38,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'openEditPlaylistModal'
+      'openEditPlaylistModal', 'setPlayerSongs'
     ]),
     deletePlaylist () {
       if (window.confirm('Are you sure?')) {
@@ -65,6 +54,14 @@ export default {
       }).catch(() => {
         this.loaded = false
       })
+    },
+    setPlayContent () {
+      this.setPlayerSongs(this.playlistInfo.songs.map(song => {
+        return {
+          song,
+          artist: song.artist
+        }
+      }))
     }
   },
   beforeCreate () {
@@ -75,33 +72,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-@import '@/styles/variables.scss';
-.songs {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.songs-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.song {
-  width: 60%;
-}
-.title {
-  margin: 30px 0;
-  color: $forest;
-  font: $font-regular-bold;
-  display: inline-block;
-}
-.message {
-  color: $forest;
-  font: $font-regular-bold;
-}
-</style>

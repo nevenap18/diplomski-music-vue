@@ -3,10 +3,11 @@
     <navigation/>
     <!-- <Header/> -->
     <svgs/>
-    <router-view v-if="loaded"></router-view>
+    <router-view class="view" v-if="loaded"></router-view>
     <AddToPlaylistModal v-if="showAddPlaylistModal"/>
     <CreatePlaylistWrap v-if="showCreatePlaylistModal"/>
     <EditPlaylistModal v-if="showEditPlaylistModal"/>
+    <Player v-if="getCurrentSong"/>
   </div>
 </template>
 
@@ -16,6 +17,7 @@ import AddToPlaylistModal from '../modals/AddToPlaylistModal.vue'
 import CreatePlaylistWrap from '../modals/CreatePlaylistWrap.vue'
 import EditPlaylistModal from '../modals/EditPlaylistModal.vue'
 import Svgs from '../svg/Svgs'
+import Player from '../components/Player.vue';
 import {mapActions, mapGetters} from 'vuex'
 // import Header from '../components/Header.vue'
 export default {
@@ -25,12 +27,13 @@ export default {
     Svgs,
     AddToPlaylistModal,
     CreatePlaylistWrap,
-    EditPlaylistModal
+    EditPlaylistModal,
+    Player
     // Header
   },
   computed: {
     ...mapGetters([
-      'showAddPlaylistModal', 'showCreatePlaylistModal', 'showEditPlaylistModal'
+      'showAddPlaylistModal', 'showCreatePlaylistModal', 'showEditPlaylistModal', 'getCurrentSong'
     ])
   },
   methods: {
@@ -53,11 +56,11 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/variables.scss';
 #app-wrapper {
-  background: $cream;
+  background: $background;
   position: relative;
+  display: flex;
   height: 100vh;
   max-height: 100%;
   z-index: 450;
-  overflow-y: scroll;
 }
 </style>

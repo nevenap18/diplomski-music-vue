@@ -1,5 +1,6 @@
 <template>
   <div class="page">
+    <top-header />
     <div class="page-container">
       <router-view></router-view>
     </div>
@@ -8,10 +9,11 @@
 </template>
 
 <script>
-// import Player from '../components/Player.vue'
+import TopHeader from '../components/TopHeader.vue'
 export default {
   name: 'Page',
   components: {
+    TopHeader
   }
 }
 </script>
@@ -20,13 +22,12 @@ export default {
 .page {
   overflow-x: hidden;
   width: 100%;
-  margin-top: 90px;
-  display: flex;
-  justify-content: center;
-  background: $cream;
+  background: $background;
 }
 .page-container {
   min-width: 500px;
-  width: 70%;
+  margin-left: 50px;
+  width: 92%;
+  padding-bottom: 130px;
 }
 </style>

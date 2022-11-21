@@ -1,3 +1,4 @@
+
 <template>
   <div class="container" @click.self="closeEditPlaylistModal">
     <div class="edit-modal">
@@ -10,38 +11,31 @@
         </svg>
         <div class="modal-name"> EDIT PLAYLIST </div>
       </div>
-      <form @submit.prevent>
-        <div class="playlists">
-          <label for="title"><b>Title</b></label>
-          <input
-            type="text"
-            placeholder="Title"
-            name="title"
-            id="title"
-            :value="title"
-            @input="title = $event.target.value"
-            @focus="resetError"
-            autocomplete="off"
-            required
-            >
-          <label for="desc"><b>Description</b></label>
-          <input
-            type="text"
-            placeholder="Description"
-            name="desc"
-            id="desc"
-            :value="desc"
-            @input="desc = $event.target.value"
-            @focus="resetError"
-            autocomplete="off"
-            required
-          >
-        </div>
-      </form>
-      <div class="edit">
-        <button class="button-edit" type="submit" @click="editPlaylist">Save</button>
+      <form class="form" @submit.prevent>
+        <Input
+          class="input"
+          label="Title:"
+          placeholder="Title"
+          id="title"
+          :value="title"
+          @change="title = $event"
+          @focus="resetError"
+          autocomplete="off"
+        />
+        <Input
+          class="input"
+          type="text"
+          label="Description:"
+          placeholder="Description"
+          id="description"
+          :value="desc"
+          @change="desc = $event"
+          @focus="resetError"
+          autocomplete="off"
+        />
+        <Button type="submit" styleType="accent" label="Save" :disabled="!this.title" @click.native="editPlaylist"/>
         <p v-if="error" class="error">{{errorMessage}}</p>
-      </div>
+      </form>
     </div>
   </div>
 </template>
@@ -49,8 +43,10 @@
 <script>
 import {mapActions, mapGetters} from 'vuex'
 import PlaylistRepo from '@/helpers/repo/Playlist.js'
+import Input from '../components/Input.vue'
+import Button from '../components/Button.vue'
 export default {
-  name: 'EditPlaylistModal',
+  name: 'CreatePlaylistModal',
   data () {
     return {
       title: '',
@@ -60,6 +56,8 @@ export default {
     }
   },
   components: {
+    Input,
+    Button
   },
   computed: {
     ...mapGetters([
@@ -81,7 +79,7 @@ export default {
       })
     },
     resetError () {
-      this.errorLogin = false
+      this.error = false
       this.errorMessage = ''
     }
   },
@@ -100,7 +98,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba($color: black, $alpha: 0.3);
+  background: rgba($color: black, $alpha: 0.6);
   z-index: 522;
 }
 .edit-modal {
@@ -110,75 +108,55 @@ export default {
   position: absolute;
   top: 50%;
   left: 50%;
-  background: $moss;
-  width: 40vw;
-  height: 60vh;
-  max-height: 800px;
+  background: $background-alternate;
+  width: 30vw;
   max-width: 500px;
-  min-height: 400px;
   min-width: 300px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-}
-.playlists {
-  max-height: 500px;
-  width: 100%;
-  overflow-y: auto;
-  color: $cream;
+  border-radius: $radius;
 }
 .container-top {
   width: 100%;
   display: flex;
-  flex-direction: column;
+  height: 50px;
   justify-content: center;
   align-items: center;
+  position: relative;
+  font: $font-medium-bold;
+  color: $font-normal;
 }
-.svg {
-  align-self: center;
+.form {
+  width: 80%;
+  margin: 50px 0;
 }
-svg {
-  width: 17px;
-  height: 17px;
-  fill: $cream;
+.input {
+  margin-top: 30px;
+  display: block;
+}
+
+button {
+  display: block;
+  width: 100%;
+  margin-top: 24px;
+}
+
+.close-svg {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 35px;
+  height: 35px;
+  fill: $color-normal;
   margin-left: 10px;
   cursor: pointer;
 }
-button {
-  display: inline-block;
-  padding: 10px 30px;
-  margin-right: 15px;
-  background: transparent;
-  border: transparent;
-  border-radius: 4px;
-  background: $forest;
-  font: $font-regular;
-  color: $cream;
-  cursor: pointer;
-}
-input[type=text] {
-  outline: none;
-  background: transparent;
-  border-width: 0 0 2px;
-  border-color: $cream;
-  transition: $transition;
-  width: 100%;
-  padding: 5px 5px;
-  margin: 15px 0 40px 0;
-  display: inline-block;
-  box-sizing: border-box;
-  font: $font-regular;
-  color: $cream;
-}
-input:focus {
-  border-color: $cream;
-}
-input:-webkit-autofill { 
-  -webkit-background-clip: text;
-  background-clip: text;
-}
 .error {
   color: $error;
+  &:first-letter {
+    text-transform: uppercase;
+  }
 }
 </style>

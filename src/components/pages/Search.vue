@@ -6,9 +6,15 @@
       <div class="tab" :class="{active: activeTab === 'ALBUMS'}" @click="changeTab('ALBUMS')"> ALBUMS </div>
     </div>
     <div v-if="ready" class="ready">
-      <div v-if="result && result.length > 0" class="collection">
-        <component :is="component" v-for="(item, index) in result" :key="index" :item="item"/>
+      <div v-if="result && result.length > 0 && activeTab === 'SONGS'" class="collection">
+        <SongItem @playSong="setPlayContent" v-for="(item, index) in result" :key="index" :item="item" />
       </div>
+      <CardRow
+        v-else-if="result && result.length > 0"
+        :items="result"
+        :hideTitle="true"
+        :type="getType"
+      />
       <div class="no-results" v-else>
         <span>sorry, nothing to show :D</span>
       </div>
@@ -19,24 +25,25 @@
 <script>
 import {mapActions, mapGetters} from 'vuex'
 import SearchRepo from '@/helpers/repo/Search.js'
-import SongsResults from '@/components/components/SongsResults'
-import ArtistsResults from '@/components/components/ArtistsResults'
-import AlbumsResults from '@/components/components/AlbumsResults'
+import CardRow from '@/components/cards/CardRow'
+import SongItem from '../components/SongItem.vue'
 export default {
   name: 'Search',
   components: {
+    CardRow,
+    SongItem
   },
   computed: {
     ...mapGetters([
       'searchQuery'
     ]),
-    component () {
+    getType () {
       if (this.activeTab === 'SONGS') {
-        return SongsResults
+        return 'songs'
       } else if (this.activeTab === 'ARTISTS') {
-        return ArtistsResults
+        return 'artists'
       } else {
-        return AlbumsResults
+        return 'albums'
       }
     }
   },
@@ -51,7 +58,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'setSearchQuery'
+      'setSearchQuery', 'setPlayerSongs'
     ]),
     getResults () {
       this.ready = false
@@ -76,6 +83,14 @@ export default {
           this.ready = true
         })
       }
+    },
+    setPlayContent () {
+      this.setPlayerSongs(this.result.map(song => {
+        return {
+          song,
+          artist: song.artist
+        }
+      }))
     },
     changeTab (tab) {
       this.setSearchQuery({
@@ -109,37 +124,33 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/styles/variables.scss';
-.title {
-  margin: 30px 0;
-  color: $forest;
-  font: $font-regular-bold;
-  display: inline-block;
-}
 .search-nav {
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 30px 0;
-  color: $forest;
-  font: $font-medium-bold;
+  padding: 40px 0;
+  color: $font-normal;
+  font: $font-large-bold;
   .tab {
     margin-right: 12px;
     &:hover {
+      transition: $transition;
       cursor: pointer;
-      color: $moss;
+      color: $font-accent;
     }
     &.active {
-      color: $moss;
+      color: $font-accent;
+      pointer-events: none;
     }
   }
 }
 .active {
-  color: red;
+  color: $favorite;
 }
 .no-results {
-  color: $moss;
+  color: $color-dull;
   font: $font-medium-bold;
   height: 400px;
   display: flex;

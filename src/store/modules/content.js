@@ -22,7 +22,8 @@ const state = {
   searchQuery: {
     type: '',
     term: ''
-  }
+  },
+  playerSongs: []
 }
 
 const getters = {
@@ -46,7 +47,8 @@ const getters = {
   showCreatePlaylistModal: state => state.showCreatePlaylistModal,
   showEditPlaylistModal: state => state.showEditPlaylistModal,
   editPlaylistModalData: state => state.editPlaylistModalData,
-  searchQuery: state => state.searchQuery
+  searchQuery: state => state.searchQuery,
+  playerSongs: state => state.playerSongs
 }
 
 const mutations = {
@@ -110,6 +112,9 @@ const mutations = {
   },
   SET_SEARCH_QUERY: (state, payload) => {
     state.searchQuery = payload
+  },
+  SET_PLAYER_SONGS: (state, payload) => {
+    state.playerSongs = payload
   }
 }
 const actions = {
@@ -165,18 +170,18 @@ const actions = {
     const genres = await genre.getGenres()
     commit('SET_GENRES', genres)
   },
-  openAddPlaylistModal: async ({commit}, songId) => {
+  openAddPlaylistModal: ({commit}, songId) => {
     commit('UPDATE_PLAYLIST_MODAL_DATA', songId)
     commit('OPEN_ADD_PLAYLIST_MODAL')
   },
-  closeAddPlaylistModal: async ({commit}) => {
+  closeAddPlaylistModal: ({commit}) => {
     commit('UPDATE_PLAYLIST_MODAL_DATA', {})
     commit('CLOSE_ADD_PLAYLIST_MODAL')
   },
-  openCreatePlaylistModal: async ({commit}) => {
+  openCreatePlaylistModal: ({commit}) => {
     commit('OPEN_CREATE_PLAYLIST_MODAL')
   },
-  closeCreatePlaylistModal: async ({commit}) => {
+  closeCreatePlaylistModal: ({commit}) => {
     commit('CLOSE_CREATE_PLAYLIST_MODAL')
   },
   addRemoveSongFromPlaylist: async ({dispatch}, payload) => {
@@ -195,18 +200,21 @@ const actions = {
       })
     }
   },
-  openEditPlaylistModal: async ({commit}, payload) => {
+  openEditPlaylistModal: ({commit}, payload) => {
     commit('UPDATE_EDIT_PLAYLIST_MODAL_DATA', payload)
     commit('OPEN_EDIT_PLAYLIST_MODAL')
   },
-  closeEditPlaylistModal: async ({commit}) => {
+  closeEditPlaylistModal: ({commit}) => {
     commit('UPDATE_EDIT_PLAYLIST_MODAL_DATA', {})
     commit('CLOSE_EDIT_PLAYLIST_MODAL')
   },
-  setSearchQuery: ({commit}, payload) => {
+  setPlayerSongs: ({commit}, payload) => {
     console.log(payload,'PAYLOADDD')
-    commit('SET_SEARCH_QUERY', payload)
+    commit('SET_PLAYER_SONGS', payload)
   },
+  setSearchQuery: ({commit}, payload) => {
+    commit('SET_SEARCH_QUERY', payload)
+  }
 }
 
 export default {
