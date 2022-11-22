@@ -22,12 +22,10 @@
     </div>
     <div class="container">
       <CardRow
-        v-if="favoriteAlbumsList && favoriteAlbumsList.length"
         :items="favoriteAlbumsList"
         :disableTitleNavigation="true"
         type="favorite albums"
       />
-      <div class="message" v-else>No favorite albums.</div>
     </div>
   </div>
 </template>
@@ -80,7 +78,6 @@ export default {
     await this.getFavorites()
     this.$nextTick(() => {
       this.loaded = true
-      console.log(this.favoriteAlbumsList, this.favoriteSongs)
     })
   }
 }
@@ -91,7 +88,7 @@ export default {
 .title {
   margin: 30px 0;
   color: $color-normal;
-  font: $font-regular-bold;
+  font: var(--font-regular-bold);
   display: inline-block;
 }
 .show-more {
@@ -102,16 +99,12 @@ export default {
   font-size: 25px;
   min-width: 300px;
   cursor: pointer;
-
+  margin-top: 20px;
 
   &:hover {
     transition: $transition;
     color: $color-accent;
   }
-}
-.message {
-  color: $forest;
-  font: $font-regular-bold;
 }
 </style>
 

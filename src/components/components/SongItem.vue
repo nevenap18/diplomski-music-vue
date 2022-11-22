@@ -92,10 +92,9 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font: $font-medium;
+  font: var(--font-medium);
   color: $color-normal;
   border-bottom: 1px solid $color-dull;
-  width: 100%;
 }
 .image {
   width: 50px;
@@ -105,7 +104,7 @@ export default {
 .info-container {
   display: flex;
   align-items: center;
-  font: $font-medium-bold;
+  font: var(--font-medium-bold);
   width: 30%;
 }
 .title {
@@ -130,8 +129,8 @@ export default {
   gap: 15px;
 }
 svg {
-  width: 24px;
-  height: 24px;
+  width: 21px;
+  height: 21px;
   fill: $color-normal;
   cursor: pointer;
   &:hover {
@@ -150,6 +149,12 @@ svg {
   &:hover {
     transition: $transition;
     fill: $color-normal;
+  }
+}
+@media (min-width: 2000px) {
+  svg {
+    width: 28px;
+    height: 28px;
   }
 }
 </style>

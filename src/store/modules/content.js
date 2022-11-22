@@ -121,13 +121,11 @@ const actions = {
   getFavorites: async ({commit}) => {
     const favs = new FavoritesRepo()
     await favs.getFavoriteSongs().then(res => {
-      console.log(res)
       commit('SET_FAVORITE_SONGS', res)
     }).catch(e => {
       console.log(e)
     })
     await favs.getFavoriteAlbums().then(res => {
-      console.log(res)
       commit('SET_FAVORITE_ALBUMS', res)
     }).catch(e => {
       console.log(e)
@@ -142,7 +140,6 @@ const actions = {
     })
   },
   addRemoveFavoriteAlbum: async ({commit}, payload) => {
-    console.log(payload, 'PAYLOAD')
     const favs = new FavoritesRepo()
     await favs.addRemoveFavoriteAlbum(payload).then(() => {
       commit('UPDATE_FAVORITE_ALBUM', payload)
@@ -209,7 +206,6 @@ const actions = {
     commit('CLOSE_EDIT_PLAYLIST_MODAL')
   },
   setPlayerSongs: ({commit}, payload) => {
-    console.log(payload,'PAYLOADDD')
     commit('SET_PLAYER_SONGS', payload)
   },
   setSearchQuery: ({commit}, payload) => {

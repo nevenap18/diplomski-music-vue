@@ -64,11 +64,6 @@ export default {
     cursor: pointer;
     transform: scale(1.03);
     transition: $transition;
-    .add-svg {
-      transition: $transition;
-      fill: $color-normal;
-      cursor: pointer;
-    }
   }
 }
 .image {
@@ -87,7 +82,7 @@ export default {
   position: absolute;
   top: 50%;
   left: 50%;
-  font: $font-medium-bold;
+  font: var(--font-medium-bold);
   color: $font-normal;
   text-shadow: 1px 1px $font-dull;
 }
@@ -95,8 +90,9 @@ export default {
   position: absolute;
   bottom: 5px;
   right: 10px;
-  font: $font-medium;
+  font: var(--font-medium);
   color: $font-normal;
   text-shadow: 1px 1px $font-dull;
 }
+
 </style>

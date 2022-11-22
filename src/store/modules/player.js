@@ -14,7 +14,6 @@ const mutations = {
 
 const actions = {
   updateCurrentSong: ({commit}, {song, artist}) => {
-    console.log(song, artist, 'AAAAAAAAKDJSKD')
     const songMapped = {
       songId: song.songId,
       albumId: song.albumId,
@@ -24,7 +23,6 @@ const actions = {
       artistId: artist.id,
       artist: artist.name
     }
-    console.log(songMapped)
     commit('UPDATE_CURRENT_SONG', songMapped)
   },
   stopSong({commit}){

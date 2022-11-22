@@ -73,10 +73,8 @@ export default {
 .input-text {
   position: relative;
 }
-
-
 input {
-  font: $font-regular;
+  font: var(--font-regular);
   color: $font-normal;
   width: 100%;
   height: 32px;
@@ -101,7 +99,7 @@ input {
   }
 
   & ~ label {
-    font: $font-regular;
+    font: var(--font-regular);
     color: $font-normal;
     position: absolute;
     transform: translateY(-50%);
@@ -112,8 +110,19 @@ input {
   }
 
   &::placeholder {
-    font: $font-regular;
+    font: var(--font-regular);
     color: $font-dull;
+  }
+}
+
+@media (min-width: 2000px) {
+  input {
+    height: 40px;
+    padding-left: 7px;
+
+    & ~ label {
+      top: -18px;
+    }
   }
 }
 </style>

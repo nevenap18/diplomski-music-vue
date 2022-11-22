@@ -102,11 +102,11 @@ export default {
   justify-content: center;
   align-items: center;
   position: relative;
-  font: $font-medium-bold;
+  font: var(--font-medium-bold);
   color: $font-normal;
 }
 .form {
-  width: 80%;
+  width: 90%;
   margin: 50px 0;
 }
 .input {
@@ -138,6 +138,21 @@ button {
   color: $error;
   &:first-letter {
     text-transform: uppercase;
+  }
+}
+@media (min-width: 2000px) {
+  .create-modal {
+    padding: 30px;
+    width: 30vw;
+    max-width: 700px;
+    min-width: 500px;
+  }
+  .input {
+    margin-top: 44px;
+  }
+  .close-svg {
+    width: 40px;
+    height: 40px;
   }
 }
 </style>

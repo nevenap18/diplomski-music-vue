@@ -4,9 +4,6 @@
 
 <script>
   export default {
-    name: 'MainWrapper',
-    created () {
-      console.log('MAIN CREATED')
-    }
+    name: 'MainWrapper'
   }
 </script>

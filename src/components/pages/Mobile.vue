@@ -22,7 +22,7 @@ export default {
   margin: 30px 10px;
   color: $color-normal;
   background: $background;
-  font: $font-regular-bold;
+  font: var(--font-regular-bold);
   line-height: 1;
   display: inline-block;
 }

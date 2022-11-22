@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
     <div v-for="(item, index) in landingPage" :key="index">
-      <CardRow :items="item" :type="index"/>
+      <CardRow v-if="item.length > 0" :items="item" :type="index"/>
     </div>
   </div>
 </template>

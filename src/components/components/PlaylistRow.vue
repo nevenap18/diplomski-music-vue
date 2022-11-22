@@ -1,7 +1,8 @@
 <template>
   <div class="playlist">
     <div class="info">
-      <span class="title" @click="goToPlaylist">{{playlist.title}}</span>
+      <div class="title" @click="goToPlaylist">{{playlist.title}}</div>
+      <div class="count">{{songCount}} {{countText}}</div>
     </div>
     <div class="actions">
       <svg
@@ -35,6 +36,20 @@ export default {
   computed: {
     isInPlaylist () {
       return !!this.playlist.songs.find(songId => songId === this.songId)
+    },
+    songCount () {
+      if (this.playlist.songs && this.playlist.songs.length) {
+        return this.playlist.songs.length
+      } else {
+        return '0'
+      }
+    },
+    countText () {
+      if (this.songCount === 1) {
+        return 'song'
+      } else {
+        return 'songs'
+      }
     }
   },
   methods: {
@@ -70,7 +85,8 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font: $font-medium;
+  margin: 0 15px;
+  font: var(--font-medium);
   color: $font-normal;
   border-bottom: 1px solid $color-dull;
 }
@@ -86,15 +102,29 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
+.count {
+  font: var(--font-regular);
+  color: $font-dull;
+}
 svg {
-  width: 17px;
-  height: 17px;
+  width: 20px;
+  height: 20px;
   fill: $color-normal;
   margin-left: 10px;
   cursor: pointer;
   &:hover {
     transition: $transition;
     fill: $color-accent;
+  }
+}
+@media (min-width: 2000px) {
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+  .close-svg {
+    width: 40px;
+    height: 40px;
   }
 }
 </style>

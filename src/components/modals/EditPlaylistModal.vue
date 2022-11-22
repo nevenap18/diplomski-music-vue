@@ -98,7 +98,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba($color: black, $alpha: 0.6);
+  background: rgba($color: $background, $alpha: 0.6);
   z-index: 522;
 }
 .edit-modal {
@@ -125,11 +125,11 @@ export default {
   justify-content: center;
   align-items: center;
   position: relative;
-  font: $font-medium-bold;
+  font: var(--font-medium-bold);
   color: $font-normal;
 }
 .form {
-  width: 80%;
+  width: 90%;
   margin: 50px 0;
 }
 .input {
@@ -152,11 +152,30 @@ button {
   fill: $color-normal;
   margin-left: 10px;
   cursor: pointer;
+  &:hover {
+    transition: $transition;
+    fill: $color-accent;
+  }
 }
 .error {
   color: $error;
   &:first-letter {
     text-transform: uppercase;
+  }
+}
+@media (min-width: 2000px) {
+  .edit-modal {
+    padding: 30px;
+    width: 30vw;
+    max-width: 700px;
+    min-width: 500px;
+  }
+  .input {
+    margin-top: 44px;
+  }
+  .close-svg {
+    width: 40px;
+    height: 40px;
   }
 }
 </style>

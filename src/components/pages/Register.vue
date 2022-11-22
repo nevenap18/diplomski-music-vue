@@ -94,7 +94,6 @@ export default {
       this.errorMessage = ''
     },
     async registerAction () {
-      console.log('SUBMIT')
       if (!this.email || !this.username || !this.password || !this.confirmedPassword) {
         this.errorRegister = true
         this.errorMessage = 'Please complete the form.'
@@ -123,7 +122,7 @@ export default {
 <style scoped lang="scss">
 @import '@/styles/variables.scss';
 .register-wrapper {
-  min-width: 1024px;
+  min-width: 750px;
   min-height: 100vh;
   overflow: hidden;
   position: relative;
@@ -172,12 +171,12 @@ button {
 }
 .login-text {
   margin-top: 24px;
-  font: $font-regular;
+  font: var(--font-regular);
   color: $font-normal;
   text-align: center;
 
   .login-link {
-    font: $font-regular-bold;
+    font: var(--font-regular-bold);
     color: $color-accent;
     cursor: pointer
   }
@@ -195,9 +194,20 @@ button {
     margin-right: 10px;
   }
   .title {
-    font: $font-large-bold;
+    font: var(--font-large-bold);
     color: $font-normal;
     pointer-events: none;
+  }
+}
+@media (min-width: 2000px) {
+  .input {
+    margin-top: 44px;
+  }
+  .logo {
+    .logo-svg {
+      width: 50px;
+      height: 50px;
+    }
   }
 }
 </style>

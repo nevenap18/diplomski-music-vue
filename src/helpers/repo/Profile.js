@@ -10,7 +10,6 @@ export default class ProfileRepo {
   }
   // { email: email, username: un, password: pass}
   editProfile (data) {
-    console.log(data, 'DATA')
     return Api.patch(this.pathEdit, data).then(response => response.data).catch(err => Promise.reject(err))
   }
 }

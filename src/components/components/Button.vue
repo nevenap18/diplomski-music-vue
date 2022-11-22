@@ -52,7 +52,7 @@ export default {
   cursor: pointer;
 
   &.accent {
-    font: $font-medium;
+    font: var(--font-medium);
     background: $color-accent;
     color: $font-normal;
 
@@ -71,7 +71,7 @@ export default {
     }
   }
   &.flat {
-    font: $font-medium;
+    font: var(--font-medium);
     color: $font-accent;
     box-shadow: inset 0px 0px 0px 1px $color-accent;
 

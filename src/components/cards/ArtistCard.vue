@@ -47,7 +47,7 @@
   border-radius: 50%;
 }
 .name {
-  font: $font-medium-bold;
+  font: var(--font-medium-bold);
   color: $font-normal;
   text-align: center;
 }

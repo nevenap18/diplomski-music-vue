@@ -16,6 +16,7 @@
         />
       </div>
     </div>
+    <span v-if="!items.length" class="message">Sorry, nothing to show.</span>
   </div>
 </template>
 
@@ -49,7 +50,6 @@ export default {
   },
   methods: {
     getComponent () {
-      console.log(this.items, 'iiiii')
       if (this.type === 'albums') {
         return AlbumCard
       }
@@ -83,7 +83,7 @@ export default {
   margin-bottom: 15px;
   margin-top: 35px;
   color: $font-normal;
-  font: $font-regular-bold;
+  font: var(--font-regular-bold);
   display: inline-block;
 }
 .hover-title {
@@ -100,8 +100,11 @@ export default {
   grid-auto-rows: minmax(100px, auto);
   grid-gap: 30px;
   grid-template-columns: repeat(5, 1fr);
-  margin: 20px auto;
+  margin: 30px auto;
   max-width: 100%;
 }
-
+.message {
+  color: $color-dull;
+  font: var(--font-regular-bold);
+}
 </style>

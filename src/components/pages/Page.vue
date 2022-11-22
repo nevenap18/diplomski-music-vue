@@ -22,11 +22,11 @@ export default {
 .page {
   overflow-x: hidden;
   width: 100%;
+  padding-left: 50px;
   background: $background;
 }
 .page-container {
   min-width: 500px;
-  margin-left: 50px;
   width: 92%;
   padding-bottom: 130px;
 }

@@ -1,7 +1,7 @@
 
 <template>
   <div :class="{hidden: showCreatePlaylistModal}" class="container" @click.self="closeAddPlaylistModal">
-    <div class="edit-modal">
+    <div class="add-modal">
       <div class="container-top">
         <svg
           class="close-svg"
@@ -21,7 +21,8 @@
           @closePopup="closeAddPlaylistModal"
         />
       </div>
-      <Button styleType="accent" label="Create playlist" @click.native="openCreatePlaylistModal"></Button>
+      <div v-else class="message">No playlists.</div>
+      <Button styleType="flat" label="New playlist" @click.native="openCreatePlaylistModal"></Button>
     </div>
   </div>
 </template>
@@ -47,22 +48,12 @@ export default {
   },
   methods: {
     ...mapActions([
-      'closeAddPlaylistModal', 'getPlaylists', 'openCreatePlaylistModal', 'closeCreatePlaylistModal'
-    ]),
-    closeModal () {
-      if (this.showCreatePlaylistModal) {
-        this.closeCreatePlaylistModal()
-        return
-      }
-      this.closeAddPlaylistModal()
-    }
+      'closeAddPlaylistModal', 'getPlaylists', 'openCreatePlaylistModal'
+    ])
   },
   async created () {
     try {
       await this.getPlaylists()
-      // this.$nextTick(() => {
-      console.log(this.playlistsList)
-      // })
     } catch (e) {
       console.log(e)
     }
@@ -78,10 +69,10 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba($color: black, $alpha: 0.3);
+  background: rgba($color: $background, $alpha: 0.6);
   z-index: 522;
 }
-.edit-modal {
+.add-modal {
   padding: 20px;
   border-radius: 3px;
   transform: translate(-50%, -50%);
@@ -105,12 +96,12 @@ export default {
   justify-content: center;
   align-items: center;
   position: relative;
-  font: $font-medium-bold;
+  font: var(--font-medium-bold);
   color: $font-normal;
   margin-bottom: 50px;
 }
 .playlists {
-  width: 80%;
+  width: 90%;
   max-height: 400px;
   overflow-y: auto;
 }
@@ -146,11 +137,35 @@ button {
   fill: $color-normal;
   margin-left: 10px;
   cursor: pointer;
+  &:hover {
+    transition: $transition;
+    fill: $color-accent;
+  }
 }
 .error {
   color: $error;
   &:first-letter {
     text-transform: uppercase;
+  }
+}
+.message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  color: $color-dull;
+  font: var(--font-regular-bold);
+}
+@media (min-width: 2000px) {
+  .add-modal {
+    padding: 30px;
+    width: 30vw;
+    max-width: 700px;
+    min-width: 500px;
+  }
+  .close-svg {
+    width: 40px;
+    height: 40px;
   }
 }
 </style>

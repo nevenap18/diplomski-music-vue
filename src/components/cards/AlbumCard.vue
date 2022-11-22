@@ -50,11 +50,11 @@
   border-radius: $radius;
 }
 .title {
-  font: $font-medium-bold;
+  font: var(--font-medium-bold);
   color: $font-normal;
 }
 .artist {
-  font: $font-regular-bold;
+  font: var(--font-regular-bold);
   color: $font-dull;
 }
 </style>

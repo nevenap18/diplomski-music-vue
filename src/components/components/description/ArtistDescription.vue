@@ -31,16 +31,19 @@ export default {
 }
 .image {
   max-width: 300px;
+  min-width: 300px;
+  min-height: 300px;;
   border-radius: 50%;
 }
 .info-container {
   width: 100%;
+  max-height: 300px;
   display: flex;
   margin-left: 30px;
   flex-direction: column;
   justify-content: center;
   .title-container {
-    font: $font-xxlarge-bold;
+    font: var(--font-xxlarge-bold);
     display: flex;
     align-items: center;
   }
@@ -48,9 +51,25 @@ export default {
     color: $color-normal;
   }
   .description {
-    font: $font-regular;
+    font: var(--font-regular);
     color: $color-normal;
     margin-top: 15px;
+    padding-right: 10px;
+    overflow-y: auto;
+  }
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: $background-alternate;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: $color-normal;
+    border-radius: 4px;
   }
 }
 svg {
@@ -67,5 +86,12 @@ svg {
 .delete-svg:hover {
   transition: $transition;
   fill: $maroon;
+}
+@media (min-width: 2000px) {
+  svg {
+    margin-left: 15px;
+    width: 30px;
+    height: 30px;
+  }
 }
 </style>

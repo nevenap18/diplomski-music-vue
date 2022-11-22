@@ -97,7 +97,7 @@ export default {
 <style scoped lang="scss">
 @import '@/styles/variables.scss';
 .login-wrapper {
-  min-width: 1024px;
+  min-width: 750px;
   min-height: 100vh;
   overflow: hidden;
   position: relative;
@@ -158,9 +158,20 @@ button {
     margin-right: 10px;
   }
   .title {
-    font: $font-large-bold;
+    font: var(--font-large-bold);
     color: $font-normal;
     pointer-events: none;
+  }
+}
+@media (min-width: 2000px) {
+  .input {
+    margin-top: 44px;
+  }
+  .logo {
+    .logo-svg {
+      width: 50px;
+      height: 50px;
+    }
   }
 }
 </style>

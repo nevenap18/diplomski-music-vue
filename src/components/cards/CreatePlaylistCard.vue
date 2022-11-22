@@ -44,7 +44,7 @@ import {mapActions} from 'vuex'
     transition: $transition;
     .add-svg {
       transition: $transition;
-      fill: $color-normal;
+      fill: $color-accent;
       cursor: pointer;
     }
   }
@@ -67,9 +67,21 @@ import {mapActions} from 'vuex'
   text-shadow: 1px 1px $font-dull;
 }
 .add-svg {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   fill: $color-dull;
   cursor: pointer;
+}
+@media (min-width: 2000px) {
+  .add-svg {
+    width: 45px;
+    height: 45px;
+  }
+}
+@media (max-width: 1024px) {
+  .add-svg {
+    width: 30px;
+    height: 30px;
+  }
 }
 </style>

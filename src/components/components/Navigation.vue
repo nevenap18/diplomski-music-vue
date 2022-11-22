@@ -114,7 +114,7 @@ export default {
     margin-right: 10px;
   }
   .title {
-    font: $font-large-bold;
+    font: var(--font-large-bold);
     color: $font-normal;
   }
   &:hover {
@@ -126,17 +126,18 @@ export default {
   display: flex;
   flex-direction: column;
   width: 70%;
+  height: 45%;
 }
 .menu {
-  font: $font-regular;
+  font: var(--font-regular);
   color: $font-dull;
 }
 .link {
   width: 100%;
-  height: 10%;
+  height: 8%;
   min-height: 60px;
-  max-height: 100px;
-  font: $font-regular-bold;
+  max-height: 80px;
+  font: var(--font-regular-bold);
   color: $font-normal;
   display: flex;
   align-items: center;
@@ -159,6 +160,29 @@ export default {
     color: $font-accent;
     .link-svg {
       fill: $color-accent;
+    }
+  }
+}
+@media (max-width: 1024px) {
+  .links {
+    height: 35%;
+  }
+  .link {
+    min-height: 50px;
+  }
+}
+@media (min-width: 2000px) {
+  .logo {
+    .logo-svg {
+      width: 50px;
+      height: 50px;
+    }
+  }
+  .link {
+    height: 12%;
+    .link-svg {
+      width: 30px;
+      height: 30px;
     }
   }
 }

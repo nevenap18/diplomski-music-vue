@@ -61,7 +61,7 @@
   border-radius: $radius;
 }
 .title {
-  font: $font-regular-bold;
+  font: var(--font-regular-bold);
   color: $font-normal;
 }
 </style>

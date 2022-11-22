@@ -150,7 +150,7 @@ export default {
       this.currentSeconds = this.audio.currentTime
     },
     ended(){
-      this.playingState = 0
+      this.changeNextSong()
     },
     stopSong() {
       this.audio.removeEventListener('timeupdate', this.update)
@@ -290,7 +290,7 @@ export default {
     min-width: 350px;
     margin-bottom: 15px;
     .info {
-      font: $font-medium-bold;
+      font: var(--font-medium-bold);
       color: $font-normal;
     }
     .actions {
@@ -327,7 +327,7 @@ export default {
     align-items: center;
 
     .time {
-      font: $font-regular;
+      font: var(--font-regular);
       color: $font-normal;
     }
     .progress-bar {
@@ -382,12 +382,41 @@ export default {
         &::-webkit-slider-thumb {
           -webkit-appearance: none;
           appearance: none;
-          width: 17px;
-          height: 17px;
+          width: 15px;
+          height: 15px;
           border-radius: 50%;
           background: $color-accent;
         }
       }
     }
   }
+  @media (min-width: 2000px) {
+  .controls {
+    svg {
+      width: 50px;
+      height: 50px;
+    }
+    .stop {
+      width: 30px;
+      height: 30px;
+    }
+  }
+  .volume-container {
+    width: 280px;
+    .volume-icon {
+      width: 45px;
+      height: 45px;
+    }
+  }
+  .middle-container {
+    .info-actions {
+      .actions {
+        svg {
+          width: 35px;
+          height: 35px;
+        }
+      }
+    }
+  }
+}
 </style>

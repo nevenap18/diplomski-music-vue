@@ -132,7 +132,7 @@ export default {
   align-items: center;
   padding: 40px 0;
   color: $font-normal;
-  font: $font-large-bold;
+  font: var(--font-large-bold);
   .tab {
     margin-right: 12px;
     &:hover {
@@ -151,7 +151,7 @@ export default {
 }
 .no-results {
   color: $color-dull;
-  font: $font-medium-bold;
+  font: var(--font-medium-bold);
   height: 400px;
   display: flex;
   justify-content: center;

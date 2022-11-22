@@ -54,7 +54,7 @@
   border-radius: $radius;
 }
 .title {
-  font: $font-medium-bold;
+  font: var(--font-medium-bold);
   color: $font-normal;
 }
 </style>

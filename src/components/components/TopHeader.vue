@@ -10,6 +10,7 @@
       />
     </div>
     <div class="profile-container">
+      {{ profile.username }}
       <router-link to="/settings" tag="div" class="profile" exact>
         <img class="profile-img" v-if="profile" alt="avatar" :src="profile.image"/>
       </router-link>
@@ -62,15 +63,17 @@ export default {
   align-items: center;
 }
 .search-container {
-  margin-left: 50px;
   width: 300px;
 }
 
 .profile-container {
   margin-right: 50px;
+  color: $color-dull;
+  font: var(--font-medium-bold);
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 15px;
 }
 .settings-button {
   margin-right: 10px;

@@ -6,7 +6,6 @@ import mobileDetector from '../helpers/mobileDetector.js'
 export default async function (to) {
   // get stored token
   const deviceType = mobileDetector.deviceType
-  console.log(deviceType, 'aaaaaaaaaa')
   if (deviceType === 'mobile') {
     return Promise.resolve('/mobile')
   }

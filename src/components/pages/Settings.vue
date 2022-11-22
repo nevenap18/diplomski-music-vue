@@ -9,7 +9,7 @@
       />
       <span class="username">{{profile.username}}</span>
     </div>
-    <div class="info">Login details</div>
+    <div class="info">Account details</div>
     <form v-if="profile" @submit.prevent class="content">
       <Input
           class="input"
@@ -118,11 +118,11 @@ export default {
   border-radius: 50%;
 }
 .username {
-  font: $font-large-bold;
+  font: var(--font-large-bold);
   color: $font-normal;
 }
 .info {
-  font: $font-large-bold;
+  font: var(--font-large-bold);
   color: $font-dull;
   border-bottom: 2px solid $color-dull;
   width: 100%;
@@ -159,6 +159,16 @@ button {
   color: $error;
   &:first-letter {
     text-transform: uppercase;
+  }
+}
+@media (min-width: 2000px) {
+  .settings {
+    min-width: 500px;
+    max-width: 700px;
+  }
+  .input-text {
+    margin-top: 60px;
+    display: block;
   }
 }
 </style>

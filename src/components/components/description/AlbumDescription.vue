@@ -57,15 +57,16 @@ export default {
   margin-left: 30px;
   flex-direction: column;
   justify-content: center;
+  max-height: 300px;
   .title-container {
-    font: $font-xxlarge-bold;
+    font: var(--font-xxlarge-bold);
   }
   .title {
     color: $color-normal;
   }
   .artist {
     margin-bottom: 15px;
-    font: $font-medium-bold;
+    font: var(--font-medium-bold);
     color: $color-dull;
     .artist-link {
       cursor: pointer;
@@ -75,14 +76,30 @@ export default {
     }
   }
   .year {
-    font: $font-regular-bold;
+    font: var(--font-regular-bold);
     color: $color-dull;
     margin-bottom: 10px;
   }
   .description {
-    font: $font-regular;
+    font: var(--font-regular);
     color: $color-normal;
-    margin-bottom: 10px;
+    margin-top: 10px;
+    padding-right: 10px;
+    overflow-y: auto;
+  }
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: $background-alternate;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: $color-normal;
+    border-radius: 4px;
   }
 }
 svg {
@@ -101,6 +118,13 @@ svg {
   &:hover {
     transition: $transition;
     fill: $favorite-hover;
+  }
+}
+@media (min-width: 2000px) {
+  svg {
+    margin-left: 15px;
+    width: 30px;
+    height: 30px;
   }
 }
 </style>

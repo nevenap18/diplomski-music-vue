@@ -133,7 +133,6 @@ export const router = new Router({
           ],
           beforeEnter: async (to, from, next) => {
             const route = await LoginMiddleware(to)
-            console.log(route)
             next(route)
           }
         }
