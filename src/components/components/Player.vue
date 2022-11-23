@@ -362,6 +362,7 @@ export default {
       width: 35px;
       height: 35px;
       fill: $color-normal;
+      cursor: pointer;
     }
 
     .volume-bar {

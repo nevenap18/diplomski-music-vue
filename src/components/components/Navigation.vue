@@ -23,7 +23,7 @@
         </router-link>
         <router-link active-class="active" class="link" tag="div" to="/favorites" exact>
           <svg class="link-svg">
-            <use href="#favorites"></use>
+            <use href="#heart"></use>
           </svg>
           <span>FAVORITES</span>
         </router-link>
