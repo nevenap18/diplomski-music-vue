@@ -52,7 +52,7 @@
             @change="confirmedPassword = $event"
             autocomplete="off"
           />
-          <Button type="submit" styleType="accent" label="Register" :disabled="!username || !password || !confirmedPassword" @click.native="registerAction"/>
+          <Button v-loader="loading" type="submit" styleType="accent" label="Register" :disabled="!username || !password || !confirmedPassword" @click.native="registerAction"/>
           <div class="login-text">
             <span>Already a registered user? <span @click="goToLogin" class="login-link">Login</span></span>
           </div>
@@ -85,7 +85,8 @@ export default {
       password: '',
       confirmedPassword: '',
       errorRegister: false,
-      errorMessage: ''
+      errorMessage: '',
+      loading: false
     }
   },
   methods: {
@@ -94,6 +95,7 @@ export default {
       this.errorMessage = ''
     },
     async registerAction () {
+      this.loading = true
       if (!this.email || !this.username || !this.password || !this.confirmedPassword) {
         this.errorRegister = true
         this.errorMessage = 'Please complete the form.'
@@ -106,10 +108,14 @@ export default {
       }
       const auth = new Auth()
       await auth.register(this.email, this.username, this.password).then(() => {
-        this.$router.push({name: 'Login'})
+        setTimeout(() => {
+          this.$router.push({name: 'Login'})
+          this.loading = false
+        }, 1000)
       }).catch(e => {
         this.errorRegister = true
         this.errorMessage = e.response.data.message[0]
+        this.loading = false
       })
     },
     goToLogin () {

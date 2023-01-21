@@ -50,6 +50,7 @@ export default {
   background: transparent;
   border-radius: $radius;
   cursor: pointer;
+  position: relative;
 
   &.accent {
     font: var(--font-medium);

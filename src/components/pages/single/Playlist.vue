@@ -36,6 +36,13 @@ export default {
       loaded: false
     }
   },
+  watch: {
+    showEditPlaylistModal (val) {
+      if (!val) {
+        this.getPlaylistInfo()
+      }
+    }
+  },
   methods: {
     ...mapActions([
       'openEditPlaylistModal', 'setPlayerSongs'

@@ -16,7 +16,7 @@
         :type="getType"
       />
       <div class="no-results" v-else>
-        <span>sorry, nothing to show :D</span>
+        <span>Sorry, nothing to show. Try something else.</span>
       </div>
     </div>
   </div>

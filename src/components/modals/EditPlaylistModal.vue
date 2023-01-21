@@ -33,7 +33,7 @@
           @focus="resetError"
           autocomplete="off"
         />
-        <Button type="submit" styleType="accent" label="Save" :disabled="!this.title" @click.native="editPlaylist"/>
+        <Button v-loader="loading" type="submit" styleType="accent" label="Save" :disabled="!this.title" @click.native="editPlaylist"/>
         <p v-if="error" class="error">{{errorMessage}}</p>
       </form>
     </div>
@@ -52,7 +52,8 @@ export default {
       title: '',
       desc: '',
       error: false,
-      errorMessage: ''
+      errorMessage: '',
+      loading: false
     }
   },
   components: {
@@ -69,13 +70,17 @@ export default {
       'closeEditPlaylistModal', 'getPlaylists'
     ]),
     editPlaylist () {
+      this.loading = true
       const playlist = new PlaylistRepo()
       playlist.editPlaylist({playlistId: this.editPlaylistModalData.playlistId, title: this.title, description: this.desc}).then(() => {
-        window.location.reload()
-        this.closeEditPlaylistModal()
+        setTimeout(() => {
+          this.closeEditPlaylistModal()
+          this.loading = false
+        }, 1000)
       }).catch(e => {
         this.error = true
         this.errorMessage = e.response.data.message[0]
+        this.loading = false
       })
     },
     resetError () {

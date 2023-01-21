@@ -42,8 +42,8 @@
           autocomplete="off"
           :requiredField="false"
         />
-        <Button type="submit" styleType="accent" label="Save" @click.native="editAction"></Button>
-        <Button styleType="flat" label="Logout" @click.native="logout"></Button>
+        <Button v-loader="loadingSave" type="submit" styleType="accent" label="Save" @click.native="editAction"></Button>
+        <Button v-loader="loadingLogout" styleType="flat" label="Logout" @click.native="logout"></Button>
         <p v-if="error" class="error">{{errorMessage}}</p>
     </form>
   </div>
@@ -73,28 +73,34 @@ export default {
         password: ''
       },
       error: false,
-      errorMessage: ''
+      errorMessage: '',
+      loadingSave: false,
+      loadingLogout: false
     }
   },
   methods: {
     ...mapActions([
       'editProfile'
     ]),
-    editAction () {
-      this.editProfile(this.editedProfile).catch(e => {
+    async editAction () {
+      this.loadingSave = true
+      await this.editProfile(this.editedProfile).catch(e => {
         this.error = true
         this.errorMessage = e.response.data.message[0]
       })
+      this.loadingSave = false
     },
     resetError () {
       this.error = false
       this.errorMessage = ''
     },
     logout () {
+      this.loadingLogout = true
       document.cookie = 'token=; expires=Thu, 01-Jan-1970 00:00:01 GMT'
       setTimeout(() => {
         this.$router.push({name: 'Login'})
-      }, 1000)
+        this.loadingLogout = false
+      }, 1500)
     }
   },
   created () {

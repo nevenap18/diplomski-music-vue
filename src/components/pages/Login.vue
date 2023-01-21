@@ -29,7 +29,7 @@
             @focus="resetError"
             autocomplete="off"
           />
-          <Button type="submit" styleType="accent" label="Login" :disabled="!formDataExists" @click.native="loginAction"/>
+          <Button v-loader="loading" type="submit" styleType="accent" label="Login" :disabled="!formDataExists" @click.native="loginAction"/>
           <Button styleType="flat" label="Register" @click.native="goToRegister"/>
           <p v-if="errorLogin" class="error">{{errorMessage}}</p>
         </div>
@@ -58,7 +58,8 @@ export default {
       username: '',
       password: '',
       errorLogin: false,
-      errorMessage: ''
+      errorMessage: '',
+      loading: false
     }
   },
   computed: {
@@ -72,6 +73,7 @@ export default {
       this.errorMessage = ''
     },
     loginAction () {
+      this.loading = true
       if (!this.username || !this.password) {
         this.errorMessage = 'Please complete the form'
         this.errorLogin = true
@@ -79,12 +81,16 @@ export default {
       }
       const auth = new Auth()
       auth.login(this.username, this.password).then(res => {
-        document.cookie = `token=${res.access_token}`
-        this.$router.push({name: 'Home'})
+        setTimeout(() => {
+          document.cookie = `token=${res.access_token}`
+          this.$router.push({name: 'Home'})
+          this.loading = false
+        }, 1000)
         // set token to store
       }).catch(() => {
         this.errorLogin = true
         this.errorMessage = 'Error, check credentials.'
+        this.loading = false
       })
     },
     goToRegister () {

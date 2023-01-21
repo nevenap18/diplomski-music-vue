@@ -105,7 +105,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 40px;
+  margin: 25px 40px 40px 40px;
   cursor: pointer;
   .logo-svg {
     width: 45px;
